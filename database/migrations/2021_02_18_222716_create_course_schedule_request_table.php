@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBlocksTable extends Migration
+class CreateCourseScheduleRequestTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateBlocksTable extends Migration
      */
     public function up()
     {
-        Schema::create('blocks', function (Blueprint $table) {
+        Schema::create('course_schedule_request', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
             $table->bigInteger('course_id')->unsigned();
+            $table->bigInteger('schedule_request_id')->unsigned();
             $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
+            $table->foreign('schedule_request_id')->references('id')->on('schedule_requests')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ class CreateBlocksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('blocks');
+        Schema::dropIfExists('course_schedule_request');
     }
 }

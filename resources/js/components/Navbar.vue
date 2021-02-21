@@ -16,6 +16,8 @@
                 </router-link>
                 <router-link v-if="user.role == 'admin'" tag="li" to="/admin/course-manager"><a><i class="material-icons-outlined">class</i>Course Manager</a>
                 </router-link>
+                <router-link v-if="user.role == 'instructor'" tag="li" to="/my-requests"><a><i class="material-icons-outlined">task</i>My Requests</a>
+                </router-link>
                 <li v-if="user.role == 'student' || user.role == 'instructor'">
                     <a href="#"><i class="material-icons">menu_book</i>My Courses<i
                         class="material-icons has-sub-menu">add</i></a>

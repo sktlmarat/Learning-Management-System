@@ -18,6 +18,18 @@ class User extends Authenticatable
         return $this->belongsTo(Department::class);
     }
 
+    public function assignmentSubmissions() {
+        return $this->hasMany(AssignmentSubmission::class);
+    }
+
+    public function adviser() {
+        return $this->belongsTo(User::class, 'adviser_id');
+    }
+
+    public function schedule_request() {
+        return $this->hasOne(ScheduleRequest::class, 'student_id');
+    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -45,6 +57,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $with = ['courses', 'department'];
+    protected $with = ['courses', 'department', 'adviser', 'schedule_request'];
 
 }

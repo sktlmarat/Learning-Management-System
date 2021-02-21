@@ -11,6 +11,9 @@
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
     <execution />
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="PackageJsonUpdateNotifier">
     <dismissed value="$PROJECT_DIR$/package.json" />
   </component>
@@ -124,16 +127,18 @@
     </include_path>
   </component>
   <component name="ProjectId" id="1nHrTlxvXWuKArzQ422qd6bbRkH" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/public/js" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -169,52 +174,36 @@
       <workItem from="1612248676103" duration="11904000" />
       <workItem from="1612434238223" duration="23120000" />
       <workItem from="1612538756818" duration="5829000" />
+      <workItem from="1612711574807" duration="438000" />
+      <workItem from="1612712206385" duration="441000" />
+      <workItem from="1612712706911" duration="423000" />
+      <workItem from="1612760758379" duration="8205000" />
+      <workItem from="1612857945452" duration="19652000" />
+      <workItem from="1613113557729" duration="11163000" />
+      <workItem from="1613462707439" duration="672000" />
+      <workItem from="1613490967354" duration="1121000" />
+      <workItem from="1613581625909" duration="1424000" />
+      <workItem from="1613655697885" duration="10294000" />
+      <workItem from="1613734963158" duration="5404000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
-  <component name="WindowStateProjectService">
-    <state x="423" y="242" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1612006959196">
-      <screen x="0" y="23" width="1440" height="820" />
-    </state>
-    <state x="423" y="242" key="#com.intellij.fileTypes.FileTypeChooser/0.23.1440.820@0.23.1440.820" timestamp="1612006959196" />
-    <state x="458" y="187" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1611247407283">
-      <screen x="0" y="23" width="1440" height="820" />
-    </state>
-    <state x="458" y="187" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.23.1440.820@0.23.1440.820" timestamp="1611247407283" />
-    <state x="0" y="23" key="FileDocumentManager.FileCacheConflict" timestamp="1612007045989">
-      <screen x="0" y="23" width="1440" height="820" />
-    </state>
-    <state x="0" y="23" key="FileDocumentManager.FileCacheConflict/0.23.1440.820@0.23.1440.820" timestamp="1612007045989" />
-    <state width="1398" height="212" key="GridCell.Tab.0.bottom" timestamp="1612456530550">
-      <screen x="0" y="23" width="1440" height="820" />
-    </state>
-    <state width="1398" height="212" key="GridCell.Tab.0.bottom/0.23.1440.820@0.23.1440.820" timestamp="1612456530550" />
-    <state width="1398" height="212" key="GridCell.Tab.0.center" timestamp="1612456530550">
-      <screen x="0" y="23" width="1440" height="820" />
-    </state>
-    <state width="1398" height="212" key="GridCell.Tab.0.center/0.23.1440.820@0.23.1440.820" timestamp="1612456530550" />
-    <state width="1398" height="212" key="GridCell.Tab.0.left" timestamp="1612456530549">
-      <screen x="0" y="23" width="1440" height="820" />
-    </state>
-    <state width="1398" height="212" key="GridCell.Tab.0.left/0.23.1440.820@0.23.1440.820" timestamp="1612456530549" />
-    <state width="1398" height="212" key="GridCell.Tab.0.right" timestamp="1612456530550">
-      <screen x="0" y="23" width="1440" height="820" />
-    </state>
-    <state width="1398" height="212" key="GridCell.Tab.0.right/0.23.1440.820@0.23.1440.820" timestamp="1612456530550" />
-    <state x="229" y="72" key="SettingsEditor" timestamp="1612260542127">
-      <screen x="0" y="23" width="1440" height="820" />
-    </state>
-    <state x="229" y="72" key="SettingsEditor/0.23.1440.820@0.23.1440.820" timestamp="1612260542127" />
-    <state x="385" y="196" key="run.anything.popup" timestamp="1612445867320">
-      <screen x="0" y="23" width="1440" height="820" />
-    </state>
-    <state x="385" y="196" key="run.anything.popup/0.23.1440.820@0.23.1440.820" timestamp="1612445867320" />
-    <state x="385" y="167" width="670" height="676" key="search.everywhere.popup" timestamp="1611997961270">
-      <screen x="0" y="23" width="1440" height="820" />
-    </state>
-    <state x="385" y="167" width="670" height="676" key="search.everywhere.popup/0.23.1440.820@0.23.1440.820" timestamp="1611997961270" />
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.env" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>

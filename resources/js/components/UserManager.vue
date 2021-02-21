@@ -40,7 +40,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Email</label>
-                                        <input v-model="newEmail" type="email" class="form-control">
+                                        <input v-model="new_user.email" type="email" class="form-control">
                                     </div>
                                     <div class="form-group">
                                         <label>Password (randomly generated)</label>
@@ -75,6 +75,82 @@
                             </div>
                         </div>
                     </div>
+                    <div class="modal fade" id="EditModal" tabindex="-1" role="dialog"
+                         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Edit User</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <i class="material-icons">close</i>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label>First Name</label>
+                                            <input v-model="edit_user.first_name" type="text" class="form-control">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Last Name</label>
+                                            <input v-model="edit_user.last_name" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input v-model="edit_user.email" type="email" class="form-control">
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label>Department</label>
+                                            <select v-model="edit_user.department" class="form-control custom-select">
+                                                <option :value="department.id" v-for="department in departments">
+                                                    {{ department.name }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Role</label>
+                                            <select v-model="edit_user.role" class="form-control custom-select">
+                                                <option>student</option>
+                                                <option>instructor</option>
+                                                <option>admin</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="edit_close" type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close
+                                    </button>
+                                    <button type="button" @click="editUser()" class="btn btn-primary">Save changes
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog"
+                         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Delete Confirmation</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <i class="material-icons">close</i>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>You want to delete {{ this.delete_user.fullName }} ?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="delete_close" type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close
+                                    </button>
+                                    <button type="button" @click="deleteUser()" class="btn btn-danger">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-md-6 p-0 my-4">
                         <input v-model="search" class="form-control" type="text" placeholder="Search user">
                     </div>
@@ -88,11 +164,20 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="usr in filteredUsers">
+                        <tr v-for="(usr, i) in filteredUsers" :key="i">
                             <th scope="row">{{ usr.name }}</th>
                             <td>{{ usr.email }}</td>
                             <td>{{ usr.role }}</td>
                             <td>{{ usr.department.name }}</td>
+                            <td>
+                                <button data-toggle="modal"
+                                        @click="editHelper(usr.id, usr.name, usr.department, usr.role, usr.email)"
+                                        data-target="#EditModal" class="btn btn-warning btn-sm">Edit
+                                </button>
+                                <button class="btn btn-danger btn-sm" data-toggle="modal"
+                                        data-target="#DeleteModal" @click="deleteHelper(usr.id, usr.name)">Delete
+                                </button>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -115,7 +200,20 @@ export default {
                 last_name: '',
                 password: Math.random().toString(36).slice(-8),
                 department: '',
-                role: ''
+                role: '',
+                email: '@nu.edu.kz'
+            },
+            edit_user: {
+                id: '',
+                first_name: '',
+                last_name: '',
+                department: '',
+                role: '',
+                email: ''
+            },
+            delete_user: {
+                id: '',
+                fullName: ''
             },
             departments: null
         }
@@ -141,7 +239,7 @@ export default {
         add_user() {
             axios.post('/api/add-user/', {
                 name: this.new_user.first_name + ' ' + this.new_user.last_name,
-                email: this.newEmail,
+                email: this.new_user.email,
                 password: this.new_user.password,
                 department: this.new_user.department,
                 role: this.new_user.role
@@ -171,6 +269,63 @@ export default {
             this.new_user.password = Math.random().toString(36).slice(-8);
             this.new_user.department = '';
             this.new_user.role = '';
+        },
+        editHelper(id, name, department, role, email) {
+            this.edit_user.id = id;
+            this.edit_user.first_name = name.split(" ")[0];
+            this.edit_user.last_name = name.split(" ")[1];
+            this.edit_user.department = department.id;
+            this.edit_user.role = role;
+            this.edit_user.email = email;
+        },
+        deleteHelper(id, name) {
+            this.delete_user.fullName = name;
+            this.delete_user.id = id;
+        },
+        editUser() {
+            axios.post('/api/edit-user', {
+                name: this.edit_user.first_name + ' ' + this.edit_user.last_name,
+                user_id: this.edit_user.id,
+                email: this.edit_user.email,
+                department: this.edit_user.department,
+                role: this.edit_user.role
+            })
+                .then(response => {
+                    this.renderPage();
+                    $("#edit_close").click();
+                    this.$toast.open({
+                        message: response.data.name + ' was edited',
+                        type: 'success',
+                        position: 'top-right'
+                    });
+                })
+                .catch(e => {
+                    this.$toast.open({
+                        message: 'Can not edit this user',
+                        type: 'error',
+                        position: 'top-right'
+                    });
+                });
+
+        },
+        deleteUser() {
+            axios.post('/api/delete-user', {user_id: this.delete_user.id})
+                .then(response => {
+                    this.renderPage();
+                    $("#delete_close").click();
+                    this.$toast.open({
+                        message: this.delete_user.fullName + ' was successfully deleted',
+                        type: 'success',
+                        position: 'top-right'
+                    });
+                })
+                .catch(e => {
+                    this.$toast.open({
+                        message: 'Can not delete this user',
+                        type: 'error',
+                        position: 'top-right'
+                    });
+                });
         }
     },
     computed: {
@@ -182,16 +337,6 @@ export default {
                 });
             } else {
                 return this.users;
-            }
-        },
-        newEmail: {
-            get() {
-                return this.new_user.first_name.toLowerCase() + '.' + this.new_user.last_name.toLowerCase() + '@nu.edu.kz';
-            },
-            set(newValue) {
-                const res = newValue.split("@")[0];
-                this.new_user.first_name = res.split(".")[0];
-                this.new_user.last_name = res.split(".")[1];
             }
         },
     }

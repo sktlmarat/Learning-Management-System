@@ -20,6 +20,7 @@ class CreateCoursesTable extends Migration
             $table->bigInteger('department_id')->unsigned();
             $table->foreign('department_id')->references('id')->on('departments');
             $table->integer('capacity');
+            $table->string('thumbnail')->default('default-thumbnail.png');
             $table->timestamps();
         });
     }

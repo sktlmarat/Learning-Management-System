@@ -19,7 +19,7 @@ class CreateAssignmentsTable extends Migration
             $table->text('description');
             $table->text('file');
             $table->bigInteger('block_id')->unsigned();
-            $table->foreign('block_id')->references('id')->on('blocks');
+            $table->foreign('block_id')->references('id')->on('blocks')->onDelete('cascade');
             $table->timestamps();
         });
     }

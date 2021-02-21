@@ -48,7 +48,7 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'role' => 'student',
             'department_id' => 1,
-            'instructor_id' => 2
+            'adviser_id' => 2
         ]);
 
         $marat->courses()->create([

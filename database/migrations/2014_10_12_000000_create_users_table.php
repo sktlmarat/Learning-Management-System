@@ -22,8 +22,9 @@ class CreateUsersTable extends Migration
             $table->enum('role', ['admin', 'instructor', 'student']);
             $table->bigInteger('department_id')->unsigned();
             $table->foreign('department_id')->references('id')->on('departments');
-            $table->bigInteger('instructor_id')->unsigned()->nullable();
-            $table->foreign('instructor_id')->references('id')->on('users');
+            $table->bigInteger('adviser_id')->unsigned()->nullable();
+            $table->foreign('adviser_id')->references('id')->on('users')->onDelete('set null');
+            $table->enum('registration_status', ['approved', 'pending', 'rejected'])->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

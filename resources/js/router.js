@@ -4,7 +4,9 @@ import Dashboard from "./components/Dashboard";
 import Course from "./components/Course";
 import CourseRegistration from "./components/CourseRegistration";
 import UserManager from "./components/UserManager";
-import CourseManager from "./components/CourseManager"
+import CourseManager from "./components/CourseManager";
+import Assignment from "./components/Assignment";
+import MyRequests from "./components/MyRequests";
 
 Vue.use(VueRouter);
 
@@ -29,6 +31,14 @@ export default new VueRouter({
         {
             path: '/admin/course-manager',
             component: CourseManager
+        },
+        {
+            path: '/course/:course_id/assignment/:assignment_id',
+            component: Assignment
+        },
+        {
+            path: '/my-requests',
+            component: MyRequests
         }
     ],
     mode: 'history',

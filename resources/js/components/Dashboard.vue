@@ -7,9 +7,10 @@
                         </ol>
                     </nav>
                 </div>
-                <div class="col-4" v-for="course in user.courses">
+                <div class="col-md-4" v-for="course in user.courses">
                     <div class="card text-center">
                         <div class="card-body">
+                            <img class="card-img mb-4" :src="'/storage/' + course.thumbnail" alt="">
                             <h5 class="card-title">{{ course.title }}</h5>
                             <router-link :to=" '/course/' + course.id "><button class="btn btn-info">Go Inside</button></router-link>
                         </div>

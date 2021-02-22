@@ -139,6 +139,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
+    <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -185,6 +186,7 @@
       <workItem from="1613581625909" duration="1424000" />
       <workItem from="1613655697885" duration="10294000" />
       <workItem from="1613734963158" duration="5404000" />
+      <workItem from="1614010117307" duration="1456000" />
     </task>
     <servers />
   </component>

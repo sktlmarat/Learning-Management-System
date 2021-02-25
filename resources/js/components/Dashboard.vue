@@ -78,7 +78,7 @@ export default {
 <style scoped>
 .card-img {
     border-radius: 50%;
-    width: 160px;
+    width: 140px;
     height: 140px;
     object-fit: cover;
 }

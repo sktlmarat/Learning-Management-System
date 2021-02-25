@@ -227,3 +227,8 @@ Route::post('/reject-courses', function (Request $request) {
     return User::find($request->student_id);
 });
 
+Route::post('/delete-student-submission', function (Request $request){
+    $submission = AssignmentSubmission::find($request->id);
+    $submission->delete();
+});
+

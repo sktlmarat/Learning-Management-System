@@ -2012,12 +2012,51 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
   data: function data() {
     return {
       assignment: null,
       errors: [],
+      delete_id: '',
       submission: {
         title: '',
         text: '',
@@ -2029,25 +2068,28 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     };
   },
   mounted: function mounted() {
-    var _this = this;
+    this.renderPage();
+  },
+  methods: {
+    renderPage: function renderPage() {
+      var _this = this;
 
-    axios.get('/api/assignment/' + this.$route.params.assignment_id).then(function (response) {
-      _this.assignment = response.data;
-    })["catch"](function (e) {
-      _this.errors.push(e);
-    });
-
-    if (this.user.role == 'instructor') {
+      axios.get('/api/assignment/' + this.$route.params.assignment_id).then(function (response) {
+        _this.assignment = response.data;
+      })["catch"](function (e) {
+        _this.errors.push(e);
+      });
       axios.get('/api/assignment-submissions/' + this.$route.params.assignment_id).then(function (response) {
         _this.all_submissions = response.data;
       })["catch"](function (e) {
         _this.errors.push(e);
       });
-    }
-  },
-  methods: {
+    },
     handleFile: function handleFile(event) {
       this.submission.file = this.$refs.file.files[0];
+    },
+    deleteHelper: function deleteHelper(id) {
+      this.delete_id = id;
     },
     submitAssignment: function submitAssignment() {
       var _this2 = this;
@@ -2068,27 +2110,45 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
           'Content-Type': 'multipart/form-data'
         }
       }).then(function (response) {
+        _this2.renderPage();
+
         _this2.$toast.open({
           message: 'Your file submitted successfully!',
           type: 'success',
           position: 'top-right'
         });
-
-        _this2.initialSubmission();
       })["catch"](function (e) {
         _this2.errors.push(e);
 
         _this2.$toast.open({
-          message: 'Error occured during submission',
+          message: 'Error occurred during submission',
           type: 'error',
           position: 'top-right'
         });
       });
     },
-    initialSubmission: function initialSubmission() {
-      this.submission.title = '';
-      this.submission.text = '';
-      this.submission.file = '';
+    deleteSubmission: function deleteSubmission() {
+      var _this3 = this;
+
+      axios.post('/api/delete-student-submission', {
+        id: this.delete_id
+      }).then(function (response) {
+        _this3.renderPage();
+
+        $("#delete_close").click();
+
+        _this3.$toast.open({
+          message: 'Submission deleted successfully',
+          type: 'success',
+          position: 'top-right'
+        });
+      })["catch"](function (e) {
+        _this3.$toast.open({
+          message: 'Can not delete this submission',
+          type: 'error',
+          position: 'top-right'
+        });
+      });
     }
   }
 });
@@ -3844,7 +3904,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.card-img[data-v-040e2ab9] {\n    border-radius: 50%;\n    width: 160px;\n    height: 140px;\n    -o-object-fit: cover;\n       object-fit: cover;\n}\n", ""]);
+exports.push([module.i, "\n.card-img[data-v-040e2ab9] {\n    border-radius: 50%;\n    width: 140px;\n    height: 140px;\n    -o-object-fit: cover;\n       object-fit: cover;\n}\n", ""]);
 
 // exports
 
@@ -22207,6 +22267,129 @@ var render = function() {
             ]),
             _vm._v(" "),
             _vm.user.role == "student"
+              ? _c(
+                  "div",
+                  {
+                    staticClass: "modal fade",
+                    attrs: {
+                      id: "DeleteModal",
+                      tabindex: "-1",
+                      role: "dialog",
+                      "aria-labelledby": "exampleModalCenterTitle",
+                      "aria-hidden": "true"
+                    }
+                  },
+                  [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "modal-dialog modal-dialog-centered",
+                        attrs: { role: "document" }
+                      },
+                      [
+                        _c("div", { staticClass: "modal-content" }, [
+                          _vm._m(0),
+                          _vm._v(" "),
+                          _vm._m(1),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "modal-footer" }, [
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-secondary",
+                                attrs: {
+                                  id: "delete_close",
+                                  type: "button",
+                                  "data-dismiss": "modal"
+                                }
+                              },
+                              [_vm._v("Close\n                            ")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-danger",
+                                attrs: { type: "button" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.deleteSubmission()
+                                  }
+                                }
+                              },
+                              [_vm._v("Delete")]
+                            )
+                          ])
+                        ])
+                      ]
+                    )
+                  ]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.all_submissions &&
+            _vm.user.role == "student" &&
+            _vm.all_submissions.some(function(c) {
+              return c.user_id === _vm.user.id
+            })
+              ? _c("div", { staticClass: "card" }, [
+                  _c("div", { staticClass: "card-body w-50" }, [
+                    _c("h5", { staticClass: "card-title" }, [
+                      _vm._v("Your Submission")
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "col-md-12 p-0" },
+                      _vm._l(_vm.all_submissions, function(submission) {
+                        return submission.user_id == _vm.user.id
+                          ? _c("div", [
+                              _c("h5", { staticClass: "card-title" }, [
+                                _vm._v(_vm._s(submission.title))
+                              ]),
+                              _vm._v(" "),
+                              submission.text
+                                ? _c("p", [_vm._v(_vm._s(submission.text))])
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _c("p", [
+                                _vm._v("Submitted file:  "),
+                                _c(
+                                  "a",
+                                  {
+                                    attrs: {
+                                      href:
+                                        "/storage/" + submission.file_submission
+                                    }
+                                  },
+                                  [_vm._v(_vm._s(submission.title))]
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-danger",
+                                  attrs: {
+                                    "data-toggle": "modal",
+                                    "data-target": "#DeleteModal"
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.deleteHelper(submission.id)
+                                    }
+                                  }
+                                },
+                                [_vm._v("Delete")]
+                              )
+                            ])
+                          : _vm._e()
+                      }),
+                      0
+                    )
+                  ])
+                ])
+              : _vm.user.role == "student"
               ? _c("div", { staticClass: "card" }, [
                   _c("div", { staticClass: "card-body w-50" }, [
                     _c("h5", { staticClass: "card-title" }, [
@@ -22277,6 +22460,8 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "form-group" }, [
+                      _c("label", [_vm._v("File")]),
+                      _vm._v(" "),
                       _c("input", {
                         ref: "file",
                         staticClass: "form-control",
@@ -22382,7 +22567,37 @@ var render = function() {
       : _vm._e()
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title" }, [_vm._v("Delete Confirmation")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("i", { staticClass: "material-icons" }, [_vm._v("close")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-body" }, [
+      _c("p", [_vm._v("You want to delete this submission?")])
+    ])
+  }
+]
 render._withStripped = true
 
 

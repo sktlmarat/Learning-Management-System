@@ -174,12 +174,15 @@ Route::post('/delete-user', function (Request $request) {
 
 Route::post('/add-assignment', function (Request $request) {
     $assignment = new Assignment();
-    $file = $request->file('file');
-    $fileName = uniqid() . '.' . $file->extension();
-    $file->storePubliclyAs('public', $fileName);
+    if($request->file('file')){
+        $file = $request->file('file');
+        $fileName = uniqid() . '.' . $file->extension();
+        $file->storePubliclyAs('public', $fileName);
+        $assignment->file = $fileName;
+    }
     $assignment->title = $request->title;
     $assignment->description = $request->description;
-    $assignment->file = $fileName;
+    $assignment->deadline = $request->deadline;
     $assignment->block_id = $request->block_id;
     $assignment->save();
     return $assignment;

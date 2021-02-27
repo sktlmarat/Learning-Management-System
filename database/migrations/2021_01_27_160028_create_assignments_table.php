@@ -16,10 +16,11 @@ class CreateAssignmentsTable extends Migration
         Schema::create('assignments', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->text('description');
-            $table->text('file');
+            $table->text('description')->nullable();
+            $table->text('file')->nullable();
             $table->bigInteger('block_id')->unsigned();
             $table->foreign('block_id')->references('id')->on('blocks')->onDelete('cascade');
+            $table->dateTime('deadline')->nullable();
             $table->timestamps();
         });
     }

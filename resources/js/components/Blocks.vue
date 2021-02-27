@@ -85,11 +85,15 @@
                             <input v-model="add_assignment.title" type="text" class="form-control">
                         </div>
                         <div class="form-group col-12">
-                            <label>Description</label>
+                            <label>Description (optional)</label>
                             <textarea v-model="add_assignment.description" cols="30" rows="5" class="form-control"></textarea>
                         </div>
                         <div class="form-group col-12">
-                            <label>Attach a file</label>
+                            <label>Set Deadline (optional)</label>
+                            <input type="datetime-local" v-model="add_assignment.deadline" class="form-control">
+                        </div>
+                        <div class="form-group col-12">
+                            <label>Attach a file (optional)</label>
                             <input ref="assignment" type="file" class="form-control" @change="handleFileAssignment">
                         </div>
                     </div>
@@ -183,7 +187,8 @@ export default {
                 title: '',
                 description: '',
                 file: '',
-                block_id: ''
+                block_id: '',
+                deadline: ''
             },
             add_material: {
                 title: '',

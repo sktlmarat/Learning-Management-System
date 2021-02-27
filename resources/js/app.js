@@ -4,6 +4,7 @@ import App from './components/App';
 import Navbar from './components/Navbar'
 import VueToast from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
+import moment from 'moment'
 
 require('./bootstrap');
 
@@ -15,4 +16,10 @@ const app = new Vue({
         App,Navbar
     },
     router
+});
+
+Vue.filter('formatDate', function(value) {
+    if (value) {
+        return moment().format('MMMM Do, h:mm a');
+    }
 });

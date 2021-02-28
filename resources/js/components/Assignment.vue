@@ -21,7 +21,7 @@
                         <p>Attached file:</p>
                         <a :href="'/storage/' + assignment.file">{{ assignment.title }}</a>
                         </div>
-                        <p v-if="assignment.deadline">Assignment is due: {{ assignment.deadline | formatDate}}</p>
+                        <div v-if="assignment.deadline">Assignment is due: <span :class="parseDate(assignment.deadline) ? 'text-success' : 'text-danger'">{{ assignment.deadline | formatDate}}</span></div>
                     </div>
                 </div>
                 <div v-if="user.role == 'student'" class="modal fade" id="DeleteModal" tabindex="-1" role="dialog"
@@ -107,6 +107,8 @@
 </template>
 
 <script>
+import moment from 'moment';
+
 export default {
     props: ['user'],
     data() {
@@ -194,6 +196,9 @@ export default {
                     position: 'top-right'
                 });
             });
+        },
+        parseDate(date) {
+            return moment().format('MMMM Do, h:mm a') < moment(date).format('MMMM Do, h:mm a');
         }
     }
 }

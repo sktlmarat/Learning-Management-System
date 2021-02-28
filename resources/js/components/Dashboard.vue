@@ -47,10 +47,9 @@
                     <div class="card-body">
                         <h5 class="card-title">Contact Info</h5>
                         <ul class="list-unstyled profile-about-list">
-                            <li><i class="material-icons">mail_outline</i><span>jay.morton@gmail.com</span></li>
-                            <li><i class="material-icons">home</i><span>Lives in <a
-                                href="#">San Francisco, CA</a></span></li>
-                            <li><i class="material-icons">local_phone</i><span>+1 (678) 290 1680</span></li>
+                            <li><i class="material-icons">contact_page</i><span>{{ user.role.toUpperCase() }} - {{ user.name }}</span></li>
+                            <li><i class="material-icons">mail_outline</i><span>{{ user.email }}</span></li>
+                            <li><i class="material-icons">account_balance</i><span>Department of {{ user.department.name }}</span></li>
                         </ul>
                     </div>
                 </div>

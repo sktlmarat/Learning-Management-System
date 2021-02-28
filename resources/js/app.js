@@ -18,8 +18,9 @@ const app = new Vue({
     router
 });
 
+
 Vue.filter('formatDate', function(value) {
     if (value) {
-        return moment().format('MMMM Do, h:mm a');
+        return moment(value).format('MMMM Do, h:mm a');
     }
 });

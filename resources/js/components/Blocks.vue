@@ -138,11 +138,11 @@
                 <h3>{{ block.title }}</h3>
                 <ul>
                     <li v-for="assignment in block.assignments">
-                        <router-link :to="'/course/' + course + '/assignment/' + assignment.id">{{ assignment.title }}
+                        <i class="material-icons">download_done</i><router-link :to="'/course/' + course + '/assignment/' + assignment.id"> {{ assignment.title }}
                         </router-link>
                     </li>
                     <li v-for="material in block.materials">
-                        <a :href="'/storage/' + material.file">{{ material.title }}</a>
+                        <i class="material-icons">school</i> <a :href="'/storage/' + material.file"> {{ material.title }}</a>
                     </li>
                 </ul>
                 <button v-if="user.role == 'instructor'" @click="editHelper(block.id, block.title, i)"
@@ -352,4 +352,11 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+ul{
+    padding-left: 10px;
+    list-style: none;
+}
+</style>
 

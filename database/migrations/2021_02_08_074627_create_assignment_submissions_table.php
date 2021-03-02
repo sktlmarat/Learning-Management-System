@@ -21,7 +21,7 @@ class CreateAssignmentSubmissionsTable extends Migration
             $table->bigInteger('assignment_id')->unsigned();
             $table->foreign('assignment_id')->references('id')->on('assignments');
             $table->bigInteger('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->dateTime('submitted_at');
             $table->timestamps();
         });

@@ -235,3 +235,15 @@ Route::post('/delete-student-submission', function (Request $request){
     $submission->delete();
 });
 
+Route::post('/edit-assignment', function (Request $request) {
+    $assignment = Assignment::find($request->id);
+    $assignment->title = $request->title;
+    $assignment->description = $request->description;
+    $assignment->deadline = $request->deadline;
+    $assignment->save();
+});
+
+Route::post('/delete-assignment', function (Request $request) {
+    $assignment = Assignment::find($request->id);
+    $assignment->delete();
+});

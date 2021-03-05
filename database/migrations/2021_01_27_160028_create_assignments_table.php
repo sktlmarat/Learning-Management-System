@@ -18,6 +18,7 @@ class CreateAssignmentsTable extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->text('file')->nullable();
+            $table->integer('max_grade')->nullable();
             $table->bigInteger('block_id')->unsigned();
             $table->foreign('block_id')->references('id')->on('blocks')->onDelete('cascade');
             $table->dateTime('deadline')->nullable();

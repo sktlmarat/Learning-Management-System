@@ -73,6 +73,9 @@ class UserSeeder extends Seeder
             'capacity' => 15
         ]);
 
+        $econ = \App\Course::find(2);
+        $marat->courses()->attach($econ);
+
 
         \App\Course::find(1)->blocks()->create([
             'title' => 'Week 1'

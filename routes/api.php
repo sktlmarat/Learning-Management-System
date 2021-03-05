@@ -10,6 +10,7 @@ use App\Assignment;
 use App\AssignmentSubmission;
 use App\Material;
 use App\ScheduleRequest;
+use App\Grade;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -246,4 +247,20 @@ Route::post('/edit-assignment', function (Request $request) {
 Route::post('/delete-assignment', function (Request $request) {
     $assignment = Assignment::find($request->id);
     $assignment->delete();
+});
+
+Route::post('/set-max-grade', function (Request $request) {
+    $assignment = Assignment::find($request->id);
+    $assignment->max_grade = $request->max_grade;
+    $assignment->save();
+});
+
+Route::post('/grade-assignment', function (Request $request) {
+    $grade = new Grade();
+    $grade->assignment_id = $request->assignment_id;
+    $grade->student_id = $request->student_id;
+    $grade->grade = $request->grade;
+    $grade->feedback = $request->feedback;
+    $grade->save();
+    return $grade;
 });

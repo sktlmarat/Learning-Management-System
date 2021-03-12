@@ -268,3 +268,10 @@ Route::post('/grade-assignment', function (Request $request) {
 Route::get('/course-student/{id}', function ($id) {
     return Course::find($id)->users->where('role', 'student')->fresh('grades');
 });
+
+Route::post('/edit-grade', function (Request $request) {
+    $grade = Grade::find($request->id);
+    $grade->grade = $request->grade;
+    $grade->feedback = $request->feedback;
+    $grade->save();
+});

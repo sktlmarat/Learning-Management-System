@@ -67,30 +67,6 @@
                 </div>
             </div>
         </div>
-        <div v-if="user.role == 'instructor'" class="modal fade" id="SetMaxModal" tabindex="-1" role="dialog"
-             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Set Maximum Grade</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <i class="material-icons">close</i>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="col-md-12">
-                            <input type="number" v-model="assignment.max_grade" class="form-control" placeholder="100">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button id="set_max_close" type="button" class="btn btn-secondary"
-                                data-dismiss="modal">Close
-                        </button>
-                        <button type="button" @click="setMaxGrade()" class="btn btn-primary">Set Max</button>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="row" v-if="assignment">
             <div class="col-12">
                 <div class="card">
@@ -145,12 +121,15 @@
                     </div>
                 </div>
                 <div class="card"
-                     v-if="all_submissions && user.role == 'student' && all_submissions.some(c => c.user_id === user.id)">
+                     v-if="(all_submissions && user.role == 'student' && all_submissions.some(c => c.user_id === user.id)) || (all_submissions && user.role == 'student' && parseGrades(user))">
                     <div class="card-body w-50">
                         <h5 class="card-title">Your Submission</h5>
                         <div class="col-md-12 p-0">
+                            <p v-if="parseGrades(user)" class="text-success">Graded</p>
+                            <p v-if="parseGrades(user)"><strong>Grade: </strong> {{ parseGrades(user).grade }}</p>
+                            <p v-if="parseGrades(user)"><strong>Feedback: </strong> {{ parseGrades(user).feedback }}</p>
                             <div v-for="submission in all_submissions" v-if="submission.user_id == user.id">
-                                <h5 class="card-title">{{ submission.title }}</h5>
+                                <h5 class="card-title" v-if="submission.title">{{ submission.title }}</h5>
                                 <p v-if="submission.text">{{ submission.text }}</p>
                                 <p>Submitted file: <a
                                     :href="'/storage/' + submission.file_submission">{{ submission.title }}</a></p>
@@ -222,6 +201,7 @@ export default {
     props: ['user'],
     data() {
         return {
+            assignment_id: this.$route.params.assignment_id,
             assignment: null,
             errors: [],
             delete_id: '',
@@ -372,6 +352,15 @@ export default {
                         position: 'top-right'
                     });
                 });
+        },
+        parseGrades(student) {
+            let grade = student.grades.find(item => item.assignment_id == this.assignment_id);
+            if(grade){
+                return grade;
+            }
+            else{
+                return false;
+            }
         },
     }
 }

@@ -55,6 +55,44 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="EditGradeAssignmentModal" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Grade</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <i class="material-icons">close</i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <div class="form-group col-md-6">
+                                <label>Max</label>
+                                <input v-model="assignment.max_grade" type="text" class="form-control" placeholder="100"
+                                       readonly>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Grade</label>
+                                <input v-model="edit_grade.grade" type="number" class="form-control"
+                                       :placeholder="'0 - ' +  this.assignment.max_grade">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label>Feedback</label>
+                            <textarea v-model="edit_grade.feedback" class="form-control" rows="5"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="edit_grade_close" type="button" class="btn btn-secondary"
+                                data-dismiss="modal">Close
+                        </button>
+                        <button type="button" @click="editGrade" class="btn btn-primary">Save changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div v-if="user.role == 'instructor'" class="modal fade" id="SetMaxModal" tabindex="-1" role="dialog"
              aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -102,7 +140,7 @@
                             <tr v-for="(student, i) in filteredStudents" :key="i">
                                 <th scope="row">{{ student.id }}</th>
                                 <td>{{ student.name }}</td>
-                                <td>{{ parseGrades(student) ? parseGrades(student) : 'Not Graded' }}</td>
+                                <td>{{ parseGrades(student) ? parseGrades(student).grade : 'Not Graded' }}</td>
                                 <td>
                                     <button v-if="user.role == 'instructor' && !parseGrades(student)" class="btn btn-primary"
                                             data-toggle="modal"
@@ -111,8 +149,8 @@
                                     </button>
                                     <button v-else-if="user.role == 'instructor' && parseGrades(student)" class="btn btn-warning"
                                             data-toggle="modal"
-                                            @click="gradeHelper(student.id)"
-                                            data-target="#GradeAssignmentModal">Edit Grade
+                                            @click="editGradeHelper(parseGrades(student).id, parseGrades(student).grade, parseGrades(student).feedback)"
+                                            data-target="#EditGradeAssignmentModal">Edit Grade
                                     </button>
                                 </td>
                             </tr>
@@ -138,6 +176,11 @@ export default {
                 student_id: '',
                 feedback: '',
                 search: ''
+            },
+            edit_grade: {
+                id: '',
+                grade: '',
+                feedback: ''
             }
         }
     },
@@ -213,6 +256,11 @@ export default {
         gradeHelper(id) {
             this.grade.student_id = id;
         },
+        editGradeHelper(id, grade, feedback){
+            this.edit_grade.id = id;
+            this.edit_grade.feedback = feedback;
+            this.edit_grade.grade = grade;
+        },
         grade_assignment() {
             axios.post('/api/grade-assignment', {
                 student_id: this.grade.student_id,
@@ -238,14 +286,36 @@ export default {
                 });
         },
         parseGrades(student) {
-            var grade = student.grades.find(item => item.assignment_id == this.assignment_id);
+            let grade = student.grades.find(item => item.assignment_id == this.assignment_id);
             if(grade){
-                return grade.grade;
+                return grade;
             }
             else{
                 return false;
             }
-
+        },
+        editGrade() {
+            axios.post('/api/edit-grade', {
+                id: this.edit_grade.id,
+                grade: this.edit_grade.grade,
+                feedback: this.edit_grade.feedback,
+            })
+                .then(response => {
+                    this.renderPage();
+                    $("#edit_grade_close").click();
+                    this.$toast.open({
+                        message: 'Grade was edited',
+                        type: 'success',
+                        position: 'top-right'
+                    });
+                })
+                .catch(e => {
+                    this.$toast.open({
+                        message: 'Can not edit the grade',
+                        type: 'error',
+                        position: 'top-right'
+                    });
+                });
         }
     },
     computed: {

@@ -264,3 +264,7 @@ Route::post('/grade-assignment', function (Request $request) {
     $grade->save();
     return $grade;
 });
+
+Route::get('/course-student/{id}', function ($id) {
+    return Course::find($id)->users->where('role', 'student')->fresh('grades');
+});

@@ -116,9 +116,10 @@
                             class="btn btn-danger btn-md mt-3" data-toggle="modal"
                             data-target="#DeleteAssignmentModal" @click="deleteAssignmentHelper(assignment.id)">Delete
                         </button>
-                        <button class="btn btn-warning mt-3" data-toggle="modal"
-                                data-target="#SetMaxModal">Set Maximum Grade
+                        <router-link :to="'/course/' + $route.params.course_id + '/assignment/' + $route.params.assignment_id + '/grade'">
+                        <button class="btn btn-primary mt-3" v-if="user.role == 'instructor'">Grade Assignment
                         </button>
+                        </router-link>
                     </div>
                 </div>
                 <div v-if="user.role == 'student'" class="modal fade" id="DeleteModal" tabindex="-1" role="dialog"
@@ -182,43 +183,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal fade" id="GradeAssignmentModal" tabindex="-1" role="dialog"
-                     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Grade Assignment</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <i class="material-icons">close</i>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="form-group row">
-                                    <div class="form-group col-md-6">
-                                        <label>Max</label>
-                                        <input v-model="assignment.max_grade" type="text" class="form-control" placeholder="100" readonly>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label>Grade</label>
-                                        <input v-model="grade.grade" type="number" class="form-control"
-                                               :placeholder="'0 - ' +  this.assignment.max_grade">
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-12">
-                                    <label>Feedback</label>
-                                    <textarea v-model="grade.feedback" class="form-control" rows="5"></textarea>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button id="grade_close" type="button" class="btn btn-secondary"
-                                        data-dismiss="modal">Close
-                                </button>
-                                <button type="button" @click="grade_assignment()" class="btn btn-primary">Save changes
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="card" v-if="user.role == 'instructor'">
                     <div class="card-body">
                         <h5 class="card-title">Student Submissions</h5>
@@ -240,11 +204,6 @@
                                         <p><strong>Submitted file:</strong> <a
                                             :href="'/storage/' + submission.file_submission">{{ submission.title }}</a>
                                         </p>
-                                        <button v-if="user.role == 'instructor'" class="btn btn-primary"
-                                                data-toggle="modal"
-                                                @click="gradeHelper(submission.user.id)"
-                                                data-target="#GradeAssignmentModal">Grade
-                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -282,11 +241,6 @@ export default {
             },
             deleteAssignment: {
                 id: ''
-            },
-            grade: {
-                grade: '',
-                student_id: '',
-                feedback: ''
             }
         }
     },
@@ -419,55 +373,6 @@ export default {
                     });
                 });
         },
-        setMaxGrade() {
-            axios.post('/api/set-max-grade', {
-                max_grade: this.assignment.max_grade,
-                id: this.assignment.id
-            })
-                .then(response => {
-                    this.renderPage();
-                    $("#set_max_close").click();
-                    this.$toast.open({
-                        message: 'Maximum grade is successfully set',
-                        type: 'success',
-                        position: 'top-right'
-                    });
-                })
-                .catch(e => {
-                    this.$toast.open({
-                        message: 'Can not set max grade',
-                        type: 'error',
-                        position: 'top-right'
-                    });
-                });
-        },
-        gradeHelper(id) {
-            this.grade.student_id = id;
-        },
-        grade_assignment() {
-            axios.post('/api/grade-assignment', {
-                student_id: this.grade.student_id,
-                assignment_id: this.assignment.id,
-                grade: this.grade.grade,
-                feedback: this.grade.feedback
-            })
-                .then(response => {
-                    this.renderPage();
-                    $("#grade_close").click();
-                    this.$toast.open({
-                        message: 'Assignment graded successfully',
-                        type: 'success',
-                        position: 'top-right'
-                    });
-                })
-                .catch(e => {
-                    this.$toast.open({
-                        message: 'Can not grade assignment',
-                        type: 'error',
-                        position: 'top-right'
-                    });
-                });
-        }
     }
 }
 </script>

@@ -30,6 +30,10 @@ class User extends Authenticatable
         return $this->hasOne(ScheduleRequest::class, 'student_id');
     }
 
+    public function grades() {
+        return $this->hasMany(Grade::class, 'student_id');
+    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -57,6 +61,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $with = ['courses', 'department', 'adviser', 'schedule_request'];
+    protected $with = ['courses', 'department', 'adviser', 'schedule_request', 'grades'];
 
 }

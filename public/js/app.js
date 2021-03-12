@@ -2164,47 +2164,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
@@ -2229,11 +2188,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       },
       deleteAssignment: {
         id: ''
-      },
-      grade: {
-        grade: '',
-        student_id: '',
-        feedback: ''
       }
     };
   },
@@ -2379,59 +2333,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       })["catch"](function (e) {
         _this5.$toast.open({
           message: 'Can not delete this assignment',
-          type: 'error',
-          position: 'top-right'
-        });
-      });
-    },
-    setMaxGrade: function setMaxGrade() {
-      var _this6 = this;
-
-      axios.post('/api/set-max-grade', {
-        max_grade: this.assignment.max_grade,
-        id: this.assignment.id
-      }).then(function (response) {
-        _this6.renderPage();
-
-        $("#set_max_close").click();
-
-        _this6.$toast.open({
-          message: 'Maximum grade is successfully set',
-          type: 'success',
-          position: 'top-right'
-        });
-      })["catch"](function (e) {
-        _this6.$toast.open({
-          message: 'Can not set max grade',
-          type: 'error',
-          position: 'top-right'
-        });
-      });
-    },
-    gradeHelper: function gradeHelper(id) {
-      this.grade.student_id = id;
-    },
-    grade_assignment: function grade_assignment() {
-      var _this7 = this;
-
-      axios.post('/api/grade-assignment', {
-        student_id: this.grade.student_id,
-        assignment_id: this.assignment.id,
-        grade: this.grade.grade,
-        feedback: this.grade.feedback
-      }).then(function (response) {
-        _this7.renderPage();
-
-        $("#grade_close").click();
-
-        _this7.$toast.open({
-          message: 'Assignment graded successfully',
-          type: 'success',
-          position: 'top-right'
-        });
-      })["catch"](function (e) {
-        _this7.$toast.open({
-          message: 'Can not grade assignment',
           type: 'error',
           position: 'top-right'
         });
@@ -3605,6 +3506,308 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     courseChunks: function courseChunks() {
       return _.chunk(Object.values(this.user.courses), 2);
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/GradeAssignment.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/GradeAssignment.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['user'],
+  data: function data() {
+    return {
+      assignment: [],
+      assignment_id: this.$route.params.assignment_id,
+      all_students: null,
+      grade: {
+        grade: '',
+        student_id: '',
+        feedback: '',
+        search: ''
+      }
+    };
+  },
+  mounted: function mounted() {
+    this.renderPage();
+  },
+  methods: {
+    renderPage: function renderPage() {
+      var _this = this;
+
+      axios.get('/api/assignment/' + this.$route.params.assignment_id).then(function (response) {
+        _this.assignment = response.data;
+      })["catch"](function (e) {
+        _this.errors.push(e);
+      });
+      axios.get('/api/course-student/' + this.$route.params.course_id).then(function (response) {
+        _this.all_students = response.data;
+      })["catch"](function (e) {
+        _this.errors.push(e);
+      });
+    },
+    submitAssignment: function submitAssignment() {
+      var _this2 = this;
+
+      var formData = new FormData();
+      formData.append('file', this.submission.file);
+
+      for (var _i = 0, _Object$entries = Object.entries(this.submission); _i < _Object$entries.length; _i++) {
+        var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+            key = _Object$entries$_i[0],
+            value = _Object$entries$_i[1];
+
+        formData.append(key, value);
+      }
+
+      axios.post('/api/assignment-submit/', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(function (response) {
+        _this2.renderPage();
+
+        _this2.$toast.open({
+          message: 'Your file submitted successfully!',
+          type: 'success',
+          position: 'top-right'
+        });
+      })["catch"](function (e) {
+        _this2.errors.push(e);
+
+        _this2.$toast.open({
+          message: 'Error occurred during submission',
+          type: 'error',
+          position: 'top-right'
+        });
+      });
+    },
+    setMaxGrade: function setMaxGrade() {
+      var _this3 = this;
+
+      axios.post('/api/set-max-grade', {
+        max_grade: this.assignment.max_grade,
+        id: this.assignment.id
+      }).then(function (response) {
+        _this3.renderPage();
+
+        $("#set_max_close").click();
+
+        _this3.$toast.open({
+          message: 'Maximum grade is successfully set',
+          type: 'success',
+          position: 'top-right'
+        });
+      })["catch"](function (e) {
+        _this3.$toast.open({
+          message: 'Can not set max grade',
+          type: 'error',
+          position: 'top-right'
+        });
+      });
+    },
+    gradeHelper: function gradeHelper(id) {
+      this.grade.student_id = id;
+    },
+    grade_assignment: function grade_assignment() {
+      var _this4 = this;
+
+      axios.post('/api/grade-assignment', {
+        student_id: this.grade.student_id,
+        assignment_id: this.assignment.id,
+        grade: this.grade.grade,
+        feedback: this.grade.feedback
+      }).then(function (response) {
+        _this4.renderPage();
+
+        $("#grade_close").click();
+
+        _this4.$toast.open({
+          message: 'Assignment graded successfully',
+          type: 'success',
+          position: 'top-right'
+        });
+      })["catch"](function (e) {
+        _this4.$toast.open({
+          message: 'Can not grade assignment',
+          type: 'error',
+          position: 'top-right'
+        });
+      });
+    },
+    parseGrades: function parseGrades(student) {
+      var _this5 = this;
+
+      var grade = student.grades.find(function (item) {
+        return item.assignment_id == _this5.assignment_id;
+      });
+
+      if (grade) {
+        return grade.grade;
+      } else {
+        return false;
+      }
+    }
+  },
+  computed: {
+    filteredStudents: function filteredStudents() {
+      var _this6 = this;
+
+      if (this.search) {
+        return this.all_students.filter(function (student) {
+          var res = student.title + student.id;
+          return res.toLowerCase().includes(_this6.search.toLowerCase());
+        });
+      } else {
+        return this.all_students;
+      }
     }
   }
 });
@@ -44510,108 +44713,126 @@ var render = function() {
       ? _c("div", { staticClass: "row" }, [
           _c("div", { staticClass: "col-12" }, [
             _c("div", { staticClass: "card" }, [
-              _c("div", { staticClass: "card-body" }, [
-                _c("h5", { staticClass: "card-title" }, [
-                  _vm._v(_vm._s(_vm.assignment.title))
-                ]),
-                _vm._v(" "),
-                _vm.assignment.description
-                  ? _c("p", [_vm._v(_vm._s(_vm.assignment.description))])
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.assignment.file
-                  ? _c("div", { staticClass: "file-wrapper" }, [
-                      _c("p", [
-                        _c("strong", [_vm._v("Attached file:")]),
+              _c(
+                "div",
+                { staticClass: "card-body" },
+                [
+                  _c("h5", { staticClass: "card-title" }, [
+                    _vm._v(_vm._s(_vm.assignment.title))
+                  ]),
+                  _vm._v(" "),
+                  _vm.assignment.description
+                    ? _c("p", [_vm._v(_vm._s(_vm.assignment.description))])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.assignment.file
+                    ? _c("div", { staticClass: "file-wrapper" }, [
+                        _c("p", [
+                          _c("strong", [_vm._v("Attached file:")]),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              attrs: { href: "/storage/" + _vm.assignment.file }
+                            },
+                            [_vm._v(_vm._s(_vm.assignment.title))]
+                          )
+                        ])
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.assignment.deadline
+                    ? _c("div", [
+                        _c("strong", [_vm._v("Assignment is due:")]),
                         _vm._v(" "),
                         _c(
-                          "a",
+                          "span",
                           {
-                            attrs: { href: "/storage/" + _vm.assignment.file }
+                            class: _vm.parseDate(_vm.assignment.deadline)
+                              ? "text-success"
+                              : "text-danger"
                           },
-                          [_vm._v(_vm._s(_vm.assignment.title))]
+                          [
+                            _vm._v(
+                              _vm._s(
+                                _vm._f("formatDate")(_vm.assignment.deadline)
+                              )
+                            )
+                          ]
                         )
                       ])
-                    ])
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.assignment.deadline
-                  ? _c("div", [
-                      _c("strong", [_vm._v("Assignment is due:")]),
-                      _vm._v(" "),
-                      _c(
-                        "span",
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.user.role == "instructor"
+                    ? _c(
+                        "button",
                         {
-                          class: _vm.parseDate(_vm.assignment.deadline)
-                            ? "text-success"
-                            : "text-danger"
+                          staticClass: "btn btn-warning btn-md mt-3",
+                          attrs: {
+                            "data-toggle": "modal",
+                            "data-target": "#EditAssignmentModal"
+                          },
+                          on: {
+                            click: function($event) {
+                              return _vm.editAssignmentHelper(
+                                _vm.assignment.id,
+                                _vm.assignment.title,
+                                _vm.assignment.description,
+                                _vm.assignment.deadline
+                              )
+                            }
+                          }
                         },
-                        [
-                          _vm._v(
-                            _vm._s(
-                              _vm._f("formatDate")(_vm.assignment.deadline)
-                            )
-                          )
-                        ]
+                        [_vm._v("Edit\n                    ")]
                       )
-                    ])
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.user.role == "instructor"
-                  ? _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-warning btn-md mt-3",
-                        attrs: {
-                          "data-toggle": "modal",
-                          "data-target": "#EditAssignmentModal"
-                        },
-                        on: {
-                          click: function($event) {
-                            return _vm.editAssignmentHelper(
-                              _vm.assignment.id,
-                              _vm.assignment.title,
-                              _vm.assignment.description,
-                              _vm.assignment.deadline
-                            )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.user.role == "instructor"
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-danger btn-md mt-3",
+                          attrs: {
+                            "data-toggle": "modal",
+                            "data-target": "#DeleteAssignmentModal"
+                          },
+                          on: {
+                            click: function($event) {
+                              return _vm.deleteAssignmentHelper(
+                                _vm.assignment.id
+                              )
+                            }
                           }
-                        }
-                      },
-                      [_vm._v("Edit\n                    ")]
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.user.role == "instructor"
-                  ? _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-danger btn-md mt-3",
-                        attrs: {
-                          "data-toggle": "modal",
-                          "data-target": "#DeleteAssignmentModal"
                         },
-                        on: {
-                          click: function($event) {
-                            return _vm.deleteAssignmentHelper(_vm.assignment.id)
-                          }
-                        }
-                      },
-                      [_vm._v("Delete\n                    ")]
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-warning mt-3",
-                    attrs: {
-                      "data-toggle": "modal",
-                      "data-target": "#SetMaxModal"
-                    }
-                  },
-                  [_vm._v("Set Maximum Grade\n                    ")]
-                )
-              ])
+                        [_vm._v("Delete\n                    ")]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c(
+                    "router-link",
+                    {
+                      attrs: {
+                        to:
+                          "/course/" +
+                          _vm.$route.params.course_id +
+                          "/assignment/" +
+                          _vm.$route.params.assignment_id +
+                          "/grade"
+                      }
+                    },
+                    [
+                      _vm.user.role == "instructor"
+                        ? _c(
+                            "button",
+                            { staticClass: "btn btn-primary mt-3" },
+                            [_vm._v("Grade Assignment\n                    ")]
+                          )
+                        : _vm._e()
+                    ]
+                  )
+                ],
+                1
+              )
             ]),
             _vm._v(" "),
             _vm.user.role == "student"
@@ -44840,164 +45061,6 @@ var render = function() {
                 ])
               : _vm._e(),
             _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticClass: "modal fade",
-                attrs: {
-                  id: "GradeAssignmentModal",
-                  tabindex: "-1",
-                  role: "dialog",
-                  "aria-labelledby": "exampleModalCenterTitle",
-                  "aria-hidden": "true"
-                }
-              },
-              [
-                _c(
-                  "div",
-                  {
-                    staticClass: "modal-dialog modal-dialog-centered",
-                    attrs: { role: "document" }
-                  },
-                  [
-                    _c("div", { staticClass: "modal-content" }, [
-                      _vm._m(6),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "modal-body" }, [
-                        _c("div", { staticClass: "form-group row" }, [
-                          _c("div", { staticClass: "form-group col-md-6" }, [
-                            _c("label", [_vm._v("Max")]),
-                            _vm._v(" "),
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.assignment.max_grade,
-                                  expression: "assignment.max_grade"
-                                }
-                              ],
-                              staticClass: "form-control",
-                              attrs: {
-                                type: "text",
-                                placeholder: "100",
-                                readonly: ""
-                              },
-                              domProps: { value: _vm.assignment.max_grade },
-                              on: {
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    _vm.assignment,
-                                    "max_grade",
-                                    $event.target.value
-                                  )
-                                }
-                              }
-                            })
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "form-group col-md-6" }, [
-                            _c("label", [_vm._v("Grade")]),
-                            _vm._v(" "),
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.grade.grade,
-                                  expression: "grade.grade"
-                                }
-                              ],
-                              staticClass: "form-control",
-                              attrs: {
-                                type: "number",
-                                placeholder: "0 - " + this.assignment.max_grade
-                              },
-                              domProps: { value: _vm.grade.grade },
-                              on: {
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    _vm.grade,
-                                    "grade",
-                                    $event.target.value
-                                  )
-                                }
-                              }
-                            })
-                          ])
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "form-group col-md-12" }, [
-                          _c("label", [_vm._v("Feedback")]),
-                          _vm._v(" "),
-                          _c("textarea", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.grade.feedback,
-                                expression: "grade.feedback"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            attrs: { rows: "5" },
-                            domProps: { value: _vm.grade.feedback },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(
-                                  _vm.grade,
-                                  "feedback",
-                                  $event.target.value
-                                )
-                              }
-                            }
-                          })
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "modal-footer" }, [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-secondary",
-                            attrs: {
-                              id: "grade_close",
-                              type: "button",
-                              "data-dismiss": "modal"
-                            }
-                          },
-                          [_vm._v("Close\n                            ")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-primary",
-                            attrs: { type: "button" },
-                            on: {
-                              click: function($event) {
-                                return _vm.grade_assignment()
-                              }
-                            }
-                          },
-                          [_vm._v("Save changes\n                            ")]
-                        )
-                      ])
-                    ])
-                  ]
-                )
-              ]
-            ),
-            _vm._v(" "),
             _vm.user.role == "instructor"
               ? _c("div", { staticClass: "card" }, [
                   _c("div", { staticClass: "card-body" }, [
@@ -45097,32 +45160,7 @@ var render = function() {
                                     },
                                     [_vm._v(_vm._s(submission.title))]
                                   )
-                                ]),
-                                _vm._v(" "),
-                                _vm.user.role == "instructor"
-                                  ? _c(
-                                      "button",
-                                      {
-                                        staticClass: "btn btn-primary",
-                                        attrs: {
-                                          "data-toggle": "modal",
-                                          "data-target": "#GradeAssignmentModal"
-                                        },
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.gradeHelper(
-                                              submission.user.id
-                                            )
-                                          }
-                                        }
-                                      },
-                                      [
-                                        _vm._v(
-                                          "Grade\n                                    "
-                                        )
-                                      ]
-                                    )
-                                  : _vm._e()
+                                ])
                               ])
                             ]
                           )
@@ -45237,27 +45275,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "modal-body" }, [
       _c("p", [_vm._v("You want to delete this submission?")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-header" }, [
-      _c("h5", { staticClass: "modal-title" }, [_vm._v("Grade Assignment")]),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "close",
-          attrs: {
-            type: "button",
-            "data-dismiss": "modal",
-            "aria-label": "Close"
-          }
-        },
-        [_c("i", { staticClass: "material-icons" }, [_vm._v("close")])]
-      )
     ])
   }
 ]
@@ -47476,6 +47493,505 @@ var staticRenderFns = [
             )
           ])
         ])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/GradeAssignment.vue?vue&type=template&id=0ede272e&":
+/*!******************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/GradeAssignment.vue?vue&type=template&id=0ede272e& ***!
+  \******************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "page-content" }, [
+    _c("div", { staticClass: "page-info" }, [
+      _c("nav", { attrs: { "aria-label": "breadcrumb" } }, [
+        _c("ol", { staticClass: "breadcrumb" }, [
+          _c(
+            "li",
+            {
+              staticClass: "breadcrumb-item",
+              attrs: { "aria-current": "page" }
+            },
+            [_c("router-link", { attrs: { to: "/" } }, [_vm._v("Dashboard")])],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "li",
+            {
+              staticClass: "breadcrumb-item",
+              attrs: { "aria-current": "page" }
+            },
+            [
+              _c(
+                "router-link",
+                {
+                  attrs: {
+                    to:
+                      "/course/" +
+                      _vm.$route.params.course_id +
+                      "/assignment/" +
+                      _vm.$route.params.assignment_id
+                  }
+                },
+                [
+                  _vm._v(
+                    "\n                        Assignment\n                    "
+                  )
+                ]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "li",
+            {
+              staticClass: "breadcrumb-item active",
+              attrs: { "aria-current": "page" }
+            },
+            [_vm._v("Grading\n                ")]
+          )
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "GradeAssignmentModal",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "exampleModalCenterTitle",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "modal-dialog modal-dialog-centered",
+            attrs: { role: "document" }
+          },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("div", { staticClass: "form-group row" }, [
+                  _c("div", { staticClass: "form-group col-md-6" }, [
+                    _c("label", [_vm._v("Max")]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.assignment.max_grade,
+                          expression: "assignment.max_grade"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text", placeholder: "100", readonly: "" },
+                      domProps: { value: _vm.assignment.max_grade },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.assignment,
+                            "max_grade",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group col-md-6" }, [
+                    _c("label", [_vm._v("Grade")]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.grade.grade,
+                          expression: "grade.grade"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "number",
+                        placeholder: "0 - " + this.assignment.max_grade
+                      },
+                      domProps: { value: _vm.grade.grade },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.grade, "grade", $event.target.value)
+                        }
+                      }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group col-md-12" }, [
+                  _c("label", [_vm._v("Feedback")]),
+                  _vm._v(" "),
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.grade.feedback,
+                        expression: "grade.feedback"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { rows: "5" },
+                    domProps: { value: _vm.grade.feedback },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.grade, "feedback", $event.target.value)
+                      }
+                    }
+                  })
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: {
+                      id: "grade_close",
+                      type: "button",
+                      "data-dismiss": "modal"
+                    }
+                  },
+                  [_vm._v("Close\n                    ")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        return _vm.grade_assignment()
+                      }
+                    }
+                  },
+                  [_vm._v("Save changes\n                    ")]
+                )
+              ])
+            ])
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _vm.user.role == "instructor"
+      ? _c(
+          "div",
+          {
+            staticClass: "modal fade",
+            attrs: {
+              id: "SetMaxModal",
+              tabindex: "-1",
+              role: "dialog",
+              "aria-labelledby": "exampleModalCenterTitle",
+              "aria-hidden": "true"
+            }
+          },
+          [
+            _c(
+              "div",
+              {
+                staticClass: "modal-dialog modal-dialog-centered",
+                attrs: { role: "document" }
+              },
+              [
+                _c("div", { staticClass: "modal-content" }, [
+                  _vm._m(1),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "modal-body" }, [
+                    _c("div", { staticClass: "col-md-12" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.assignment.max_grade,
+                            expression: "assignment.max_grade"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "number", placeholder: "100" },
+                        domProps: { value: _vm.assignment.max_grade },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.assignment,
+                              "max_grade",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "modal-footer" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-secondary",
+                        attrs: {
+                          id: "set_max_close",
+                          type: "button",
+                          "data-dismiss": "modal"
+                        }
+                      },
+                      [_vm._v("Close\n                    ")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            return _vm.setMaxGrade()
+                          }
+                        }
+                      },
+                      [_vm._v("Set Max")]
+                    )
+                  ])
+                ])
+              ]
+            )
+          ]
+        )
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.assignment
+      ? _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-12" }, [
+            _c("div", { staticClass: "card" }, [
+              _c("div", { staticClass: "card-body" }, [
+                _c("h3", { staticClass: "card-title" }, [
+                  _vm._v("Grade Assignment")
+                ]),
+                _vm._v(" "),
+                _vm.user.role == "instructor"
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-warning mt-1",
+                        attrs: {
+                          "data-toggle": "modal",
+                          "data-target": "#SetMaxModal"
+                        }
+                      },
+                      [_vm._v("Set Max Grade\n                    ")]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-md-6 p-0 my-4" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: this.search,
+                        expression: "this.search"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", placeholder: "Search student" },
+                    domProps: { value: this.search },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(this, "search", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                this.all_students
+                  ? _c("table", { staticClass: "table" }, [
+                      _vm._m(2),
+                      _vm._v(" "),
+                      _c(
+                        "tbody",
+                        _vm._l(_vm.filteredStudents, function(student, i) {
+                          return _c("tr", { key: i }, [
+                            _c("th", { attrs: { scope: "row" } }, [
+                              _vm._v(_vm._s(student.id))
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(student.name))]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.parseGrades(student)
+                                    ? _vm.parseGrades(student)
+                                    : "Not Graded"
+                                )
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm.user.role == "instructor" &&
+                              !_vm.parseGrades(student)
+                                ? _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-primary",
+                                      attrs: {
+                                        "data-toggle": "modal",
+                                        "data-target": "#GradeAssignmentModal"
+                                      },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.gradeHelper(student.id)
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "Grade\n                                "
+                                      )
+                                    ]
+                                  )
+                                : _vm.user.role == "instructor" &&
+                                  _vm.parseGrades(student)
+                                ? _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-warning",
+                                      attrs: {
+                                        "data-toggle": "modal",
+                                        "data-target": "#GradeAssignmentModal"
+                                      },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.gradeHelper(student.id)
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "Edit Grade\n                                "
+                                      )
+                                    ]
+                                  )
+                                : _vm._e()
+                            ])
+                          ])
+                        }),
+                        0
+                      )
+                    ])
+                  : _vm._e()
+              ])
+            ])
+          ])
+        ])
+      : _vm._e()
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title" }, [_vm._v("Grade Assignment")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("i", { staticClass: "material-icons" }, [_vm._v("close")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title" }, [_vm._v("Set Maximum Grade")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("i", { staticClass: "material-icons" }, [_vm._v("close")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Student ID")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Student Name")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Grade")])
       ])
     ])
   }
@@ -64555,6 +65071,75 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/GradeAssignment.vue":
+/*!*****************************************************!*\
+  !*** ./resources/js/components/GradeAssignment.vue ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _GradeAssignment_vue_vue_type_template_id_0ede272e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GradeAssignment.vue?vue&type=template&id=0ede272e& */ "./resources/js/components/GradeAssignment.vue?vue&type=template&id=0ede272e&");
+/* harmony import */ var _GradeAssignment_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./GradeAssignment.vue?vue&type=script&lang=js& */ "./resources/js/components/GradeAssignment.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _GradeAssignment_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _GradeAssignment_vue_vue_type_template_id_0ede272e___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _GradeAssignment_vue_vue_type_template_id_0ede272e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/GradeAssignment.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/GradeAssignment.vue?vue&type=script&lang=js&":
+/*!******************************************************************************!*\
+  !*** ./resources/js/components/GradeAssignment.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GradeAssignment_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./GradeAssignment.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/GradeAssignment.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GradeAssignment_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/GradeAssignment.vue?vue&type=template&id=0ede272e&":
+/*!************************************************************************************!*\
+  !*** ./resources/js/components/GradeAssignment.vue?vue&type=template&id=0ede272e& ***!
+  \************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GradeAssignment_vue_vue_type_template_id_0ede272e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./GradeAssignment.vue?vue&type=template&id=0ede272e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/GradeAssignment.vue?vue&type=template&id=0ede272e&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GradeAssignment_vue_vue_type_template_id_0ede272e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GradeAssignment_vue_vue_type_template_id_0ede272e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/MyRequests.vue":
 /*!************************************************!*\
   !*** ./resources/js/components/MyRequests.vue ***!
@@ -64781,6 +65366,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_CourseManager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/CourseManager */ "./resources/js/components/CourseManager.vue");
 /* harmony import */ var _components_Assignment__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/Assignment */ "./resources/js/components/Assignment.vue");
 /* harmony import */ var _components_MyRequests__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/MyRequests */ "./resources/js/components/MyRequests.vue");
+/* harmony import */ var _components_GradeAssignment__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/GradeAssignment */ "./resources/js/components/GradeAssignment.vue");
+
 
 
 
@@ -64813,6 +65400,9 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
   }, {
     path: '/my-requests',
     component: _components_MyRequests__WEBPACK_IMPORTED_MODULE_8__["default"]
+  }, {
+    path: '/course/:course_id/assignment/:assignment_id/grade',
+    component: _components_GradeAssignment__WEBPACK_IMPORTED_MODULE_9__["default"]
   }],
   mode: 'history',
   linkActiveClass: "",

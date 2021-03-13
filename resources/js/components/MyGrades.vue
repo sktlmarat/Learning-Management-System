@@ -53,15 +53,7 @@ export default {
     props: ['user'],
     data() {
         return {
-            assignments: [],
             user_courses: '',
-            students: null,
-            request: {
-                id: '',
-                student_id: '',
-                courses: [],
-                grades: []
-            }
         }
     },
     mounted() {
@@ -69,12 +61,6 @@ export default {
     },
     methods: {
         renderPage() {
-            axios.get('/api/adviser-students/' + this.user.id)
-                .then(response => {
-                    this.students = response.data;
-                }).catch(e => {
-                this.errors.push(e);
-            });
             axios.get('/api/get-grade/' + this.user.id)
                 .then(response => {
                     this.user_courses = response.data;

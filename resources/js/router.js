@@ -8,6 +8,7 @@ import CourseManager from "./components/CourseManager";
 import Assignment from "./components/Assignment";
 import MyRequests from "./components/MyRequests";
 import GradeAssignment from "./components/GradeAssignment";
+import MyGrades from "./components/MyGrades";
 
 Vue.use(VueRouter);
 
@@ -44,6 +45,10 @@ export default new VueRouter({
         {
             path: '/course/:course_id/assignment/:assignment_id/grade',
             component: GradeAssignment
+        },
+        {
+            path: '/my-grades',
+            component: MyGrades
         }
     ],
     mode: 'history',

@@ -84,7 +84,7 @@ Route::post('/approve-courses', function (Request $request) {
     $student = User::find($request->student_id);
     $student->registration_status = 'approved';
     $courses = $request->courses;
-    foreach ($courses as $course){
+    foreach ($courses as $course) {
         $student->courses()->attach($course);
     }
     $request = ScheduleRequest::find($request->request_id);
@@ -175,7 +175,7 @@ Route::post('/delete-user', function (Request $request) {
 
 Route::post('/add-assignment', function (Request $request) {
     $assignment = new Assignment();
-    if($request->file('file')){
+    if ($request->file('file')) {
         $file = $request->file('file');
         $fileName = uniqid() . '.' . $file->extension();
         $file->storePubliclyAs('public', $fileName);
@@ -231,7 +231,7 @@ Route::post('/reject-courses', function (Request $request) {
     return User::find($request->student_id);
 });
 
-Route::post('/delete-student-submission', function (Request $request){
+Route::post('/delete-student-submission', function (Request $request) {
     $submission = AssignmentSubmission::find($request->id);
     $submission->delete();
 });
@@ -274,4 +274,8 @@ Route::post('/edit-grade', function (Request $request) {
     $grade->grade = $request->grade;
     $grade->feedback = $request->feedback;
     $grade->save();
+});
+
+Route::get('get-grade/{user_id}', function ($user_id) {
+    return User::find($user_id)->courses->fresh(['assignments', 'assignments.grades']);
 });

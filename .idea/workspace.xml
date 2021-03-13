@@ -124,6 +124,7 @@
       <path value="$PROJECT_DIR$/vendor/sebastian/object-enumerator" />
       <path value="$PROJECT_DIR$/vendor/sebastian/complexity" />
       <path value="$PROJECT_DIR$/vendor/laravel/ui" />
+      <path value="$PROJECT_DIR$/vendor/staudenmeir/eloquent-has-many-deep" />
     </include_path>
   </component>
   <component name="ProjectId" id="1nHrTlxvXWuKArzQ422qd6bbRkH" />
@@ -197,7 +198,8 @@
       <workItem from="1614687478306" duration="107000" />
       <workItem from="1614851371038" duration="227000" />
       <workItem from="1614938293150" duration="5710000" />
-      <workItem from="1615545356921" duration="2298000" />
+      <workItem from="1615545356921" duration="2403000" />
+      <workItem from="1615578640819" duration="9604000" />
     </task>
     <servers />
   </component>

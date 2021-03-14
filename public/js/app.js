@@ -2827,8 +2827,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
@@ -3475,20 +3473,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
   data: function data() {
@@ -3943,15 +3927,7 @@ __webpack_require__.r(__webpack_exports__);
   props: ['user'],
   data: function data() {
     return {
-      assignments: [],
-      user_courses: '',
-      students: null,
-      request: {
-        id: '',
-        student_id: '',
-        courses: [],
-        grades: []
-      }
+      user_courses: ''
     };
   },
   mounted: function mounted() {
@@ -3961,11 +3937,6 @@ __webpack_require__.r(__webpack_exports__);
     renderPage: function renderPage() {
       var _this = this;
 
-      axios.get('/api/adviser-students/' + this.user.id).then(function (response) {
-        _this.students = response.data;
-      })["catch"](function (e) {
-        _this.errors.push(e);
-      });
       axios.get('/api/get-grade/' + this.user.id).then(function (response) {
         _this.user_courses = response.data;
       })["catch"](function (e) {
@@ -46372,8 +46343,6 @@ var render = function() {
                     _c("span", [_vm._v(_vm._s(_vm.course.abbreviation))])
                   ]),
                   _vm._v(" "),
-                  _vm._m(1),
-                  _vm._v(" "),
                   _c("li", [
                     this.user.role == "instructor"
                       ? _c(
@@ -46391,13 +46360,7 @@ var render = function() {
                             )
                           ]
                         )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _c(
-                      "button",
-                      { staticClass: "btn btn-block btn-secondary m-t-lg" },
-                      [_vm._v("Message")]
-                    )
+                      : _vm._e()
                   ])
                 ])
               : _vm._e()
@@ -46427,15 +46390,6 @@ var staticRenderFns = [
         },
         [_c("i", { staticClass: "material-icons" }, [_vm._v("close")])]
       )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", [
-      _c("i", { staticClass: "material-icons" }, [_vm._v("rss_feed")]),
-      _c("span", [_vm._v("Followed by 716 people")])
     ])
   }
 ]
@@ -47492,6 +47446,10 @@ var render = function() {
                 [
                   _c("router-link", { attrs: { to: "/course/" + course.id } }, [
                     _c("div", { staticClass: "card text-center" }, [
+                      _c("div", { staticClass: "card-header" }, [
+                        _vm._v(_vm._s(course.abbreviation))
+                      ]),
+                      _vm._v(" "),
                       _c("div", { staticClass: "card-body" }, [
                         _c("img", {
                           staticClass: "card-img mb-4",
@@ -47522,8 +47480,6 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("div", { staticClass: "col-md-4" }, [
-        _vm._m(1),
-        _vm._v(" "),
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-body" }, [
             _c("h5", { staticClass: "card-title" }, [_vm._v("Contact Info")]),
@@ -47580,69 +47536,6 @@ var staticRenderFns = [
             },
             [_vm._v("Dashboard")]
           )
-        ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card" }, [
-      _c("div", { staticClass: "card-body" }, [
-        _c("h5", { staticClass: "card-title" }, [_vm._v("About")]),
-        _vm._v(" "),
-        _c("p", [
-          _vm._v(
-            "Quisque vel tellus sit amet quam efficitur sagittis. Fusce aliquam pulvinar suscipit."
-          )
-        ]),
-        _vm._v(" "),
-        _c("ul", { staticClass: "list-unstyled profile-about-list" }, [
-          _c("li", [
-            _c("i", { staticClass: "material-icons" }, [_vm._v("school")]),
-            _c("span", [
-              _vm._v("Studied Mechanical Engineering at "),
-              _c("a", { attrs: { href: "#" } }, [
-                _vm._v("Carnegie Mellon University")
-              ])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("i", { staticClass: "material-icons" }, [_vm._v("work")]),
-            _c("span", [
-              _vm._v("Former manager at "),
-              _c("a", { attrs: { href: "#" } }, [_vm._v("Stacks")])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("i", { staticClass: "material-icons" }, [_vm._v("my_location")]),
-            _c("span", [
-              _vm._v("From "),
-              _c("a", { attrs: { href: "#" } }, [
-                _vm._v("Boston, Massachusetts")
-              ])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("i", { staticClass: "material-icons" }, [_vm._v("rss_feed")]),
-            _c("span", [_vm._v("Followed by 716 people")])
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("button", { staticClass: "btn btn-block btn-primary m-t-lg" }, [
-              _vm._v("Follow")
-            ]),
-            _vm._v(" "),
-            _c(
-              "button",
-              { staticClass: "btn btn-block btn-secondary m-t-lg" },
-              [_vm._v("Message")]
-            )
-          ])
         ])
       ])
     ])

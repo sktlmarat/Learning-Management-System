@@ -47,14 +47,12 @@
                         <ul class="list-unstyled profile-about-list" v-if="course">
                             <li><i class="material-icons">school</i><span>{{ course.title }}</span></li>
                             <li><i class="material-icons">work</i><span>{{ course.abbreviation }}</span></li>
-                            <li><i class="material-icons">rss_feed</i><span>Followed by 716 people</span></li>
                             <li>
                                 <button data-toggle="modal"
                                         data-target="#UpdateThumbnailModal" class="btn btn-block btn-primary m-t-lg"
                                         v-if="this.user.role == 'instructor'">
                                     Update course thumbnail
                                 </button>
-                                <button class="btn btn-block btn-secondary m-t-lg">Message</button>
                             </li>
                         </ul>
                     </div>

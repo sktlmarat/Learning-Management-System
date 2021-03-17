@@ -53,7 +53,7 @@
                         <li class="nav-item nav-profile dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                <img src="http://127.0.0.1:8000/img/profile-image-1.png" alt="">
+                                <img src="http://127.0.0.1:8000{{ Storage::url(Auth::user()->avatar) }}" alt="">
                                 <span>{{ Auth::user()->name }}</span><i class="material-icons dropdown-icon">keyboard_arrow_down</i>
                             </a>
 

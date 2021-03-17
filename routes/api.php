@@ -94,15 +94,22 @@ Route::post('/approve-courses', function (Request $request) {
 });
 
 Route::post('/add-user', function (Request $request) {
+    $request->validate([
+        'file' => 'image'
+    ]);
+    $file = $request->file('file');
+    $fileName = uniqid() . '.' . $file->extension();
+    $file->storePubliclyAs('public', $fileName);
     $user = new User();
-    $user->name = $request->name;
+    $user->name = $request->first_name . ' ' . $request->last_name;
     $user->email = $request->email;
     $user->role = $request->role;
+    $user->avatar = $fileName;
     $user->password = bcrypt($request->password);
     $user->department_id = $request->department;
     $user->save();
     $data = [
-        'name' => $request->name,
+        'name' => $request->first_name . ' ' . $request->last_name,
         'email' => $request->email,
         'password' => $request->password
     ];
@@ -202,6 +209,9 @@ Route::post('/add-material', function (Request $request) {
 });
 
 Route::post('/update-course-thumbnail', function (Request $request) {
+    $request->validate([
+        'file' => 'required | image'
+    ]);
     $course = Course::find($request->course_id);
     $file = $request->file('file');
     $fileName = uniqid() . '.' . $file->extension();

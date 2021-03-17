@@ -25,6 +25,7 @@ class CreateUsersTable extends Migration
             $table->bigInteger('adviser_id')->unsigned()->nullable();
             $table->foreign('adviser_id')->references('id')->on('users')->onDelete('set null');
             $table->enum('registration_status', ['approved', 'pending', 'rejected'])->nullable();
+            $table->string('avatar')->default('default-avatar.png');
             $table->rememberToken();
             $table->timestamps();
         });

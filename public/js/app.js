@@ -4158,6 +4158,22 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+//
+//
+//
+//
 //
 //
 //
@@ -4360,7 +4376,8 @@ __webpack_require__.r(__webpack_exports__);
         password: Math.random().toString(36).slice(-8),
         department: '',
         role: '',
-        email: '@nu.edu.kz'
+        email: '@nu.edu.kz',
+        avatar: ''
       },
       edit_user: {
         id: '',
@@ -4398,18 +4415,26 @@ __webpack_require__.r(__webpack_exports__);
     add_user: function add_user() {
       var _this2 = this;
 
-      axios.post('/api/add-user/', {
-        name: this.new_user.first_name + ' ' + this.new_user.last_name,
-        email: this.new_user.email,
-        password: this.new_user.password,
-        department: this.new_user.department,
-        role: this.new_user.role
+      var formData = new FormData();
+      formData.append('file', this.new_user.avatar);
+
+      for (var _i = 0, _Object$entries = Object.entries(this.new_user); _i < _Object$entries.length; _i++) {
+        var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+            key = _Object$entries$_i[0],
+            value = _Object$entries$_i[1];
+
+        formData.append(key, value);
+      }
+
+      console.log(formData);
+      axios.post('/api/add-user/', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
       }).then(function (response) {
-        _this2.users.push(response.data);
-
-        _this2.userInitial();
-
         $("#mod_close").click();
+
+        _this2.renderPage();
 
         _this2.$toast.open({
           message: 'New user was added',
@@ -4426,12 +4451,8 @@ __webpack_require__.r(__webpack_exports__);
         });
       });
     },
-    userInitial: function userInitial() {
-      this.new_user.first_name = '';
-      this.new_user.last_name = '';
-      this.new_user.password = Math.random().toString(36).slice(-8);
-      this.new_user.department = '';
-      this.new_user.role = '';
+    handleAvatar: function handleAvatar() {
+      this.new_user.file = this.$refs.avatar.files[0];
     },
     editHelper: function editHelper(id, name, department, role, email) {
       this.edit_user.id = id;
@@ -48882,7 +48903,7 @@ var render = function() {
                             }
                           ],
                           staticClass: "form-control",
-                          attrs: { type: "text" },
+                          attrs: { type: "password" },
                           domProps: { value: _vm.new_user.password },
                           on: {
                             input: function($event) {
@@ -48999,6 +49020,17 @@ var render = function() {
                               _c("option", [_vm._v("admin")])
                             ]
                           )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group col-12" }, [
+                          _c("label", [_vm._v("Select Image")]),
+                          _vm._v(" "),
+                          _c("input", {
+                            ref: "avatar",
+                            staticClass: "form-control",
+                            attrs: { type: "file" },
+                            on: { change: _vm.handleAvatar }
+                          })
                         ])
                       ])
                     ]),

@@ -44,7 +44,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Password (randomly generated)</label>
-                                        <input v-model="new_user.password" type="text" class="form-control">
+                                        <input v-model="new_user.password" type="password" class="form-control">
                                     </div>
                                     <div class="form-row">
                                         <div class="form-group col-md-6">
@@ -62,6 +62,10 @@
                                                 <option>instructor</option>
                                                 <option>admin</option>
                                             </select>
+                                        </div>
+                                        <div class="form-group col-12">
+                                            <label>Select Image</label>
+                                            <input ref="avatar" type="file" class="form-control" @change="handleAvatar">
                                         </div>
                                     </div>
                                 </div>
@@ -201,7 +205,8 @@ export default {
                 password: Math.random().toString(36).slice(-8),
                 department: '',
                 role: '',
-                email: '@nu.edu.kz'
+                email: '@nu.edu.kz',
+                avatar: '',
             },
             edit_user: {
                 id: '',
@@ -237,17 +242,21 @@ export default {
             });
         },
         add_user() {
-            axios.post('/api/add-user/', {
-                name: this.new_user.first_name + ' ' + this.new_user.last_name,
-                email: this.new_user.email,
-                password: this.new_user.password,
-                department: this.new_user.department,
-                role: this.new_user.role
-            })
+            let formData = new FormData();
+            formData.append('file', this.new_user.avatar);
+            for (const [key, value] of Object.entries(this.new_user)) {
+                formData.append(key, value);
+            }
+            console.log(formData);
+            axios.post('/api/add-user/', formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                })
                 .then(response => {
-                    this.users.push(response.data);
-                    this.userInitial();
                     $("#mod_close").click();
+                    this.renderPage();
                     this.$toast.open({
                         message: 'New user was added',
                         type: 'success',
@@ -263,12 +272,8 @@ export default {
                     });
                 });
         },
-        userInitial() {
-            this.new_user.first_name = '';
-            this.new_user.last_name = '';
-            this.new_user.password = Math.random().toString(36).slice(-8);
-            this.new_user.department = '';
-            this.new_user.role = '';
+        handleAvatar() {
+            this.new_user.file = this.$refs.avatar.files[0];
         },
         editHelper(id, name, department, role, email) {
             this.edit_user.id = id;

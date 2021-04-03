@@ -10,7 +10,12 @@ import MyRequests from "./components/MyRequests";
 import GradeAssignment from "./components/GradeAssignment";
 import MyGrades from "./components/MyGrades";
 
+import Classes from "./components/Classes";
+import Sessions from "./components/Sessions";
+import Attendance from "./components/Attendance";
+
 Vue.use(VueRouter);
+
 
 export default new VueRouter({
     routes: [
@@ -49,7 +54,21 @@ export default new VueRouter({
         {
             path: '/my-grades',
             component: MyGrades
-        }
+        },
+        {
+            path: '/sessions/:course_id',
+            component: Sessions
+        },
+        {
+            path: '/session/:sessionId',
+            component: Classes
+        },
+        {
+            path: '/attendance',
+            name: 'attendance',
+            component: Attendance,
+            props: true
+        },
     ],
     mode: 'history',
     linkActiveClass: "",

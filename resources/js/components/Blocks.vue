@@ -3,6 +3,9 @@
         <button v-if="user.role == 'instructor'" data-toggle="modal" data-target="#AddModal"
                 class="btn btn-primary my-4">Add new block
         </button>
+        <router-link v-if="user.role == 'instructor'" :to="'/sessions/'+course"
+                class="btn btn-primary my-4">View Sessions
+        </router-link>
         <div v-if="user.role == 'instructor'" class="modal fade" id="AddModal" tabindex="-1" role="dialog"
              aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">

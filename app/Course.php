@@ -13,6 +13,10 @@ class Course extends Model
         return $this->belongsToMany(User::class);
     }
 
+    public function students() {
+        return $this->belongsToMany(User::class)->where('role','student');
+    }
+
     public function department() {
         return $this->belongsTo(Department::class);
     }
@@ -31,6 +35,13 @@ class Course extends Model
 
     public function assignments() {
         return $this->hasManyThrough(Assignment::class, Block::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function session(){
+        return $this->hasMany(Session::class);
     }
 
 

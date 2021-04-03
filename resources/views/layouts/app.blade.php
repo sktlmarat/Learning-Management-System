@@ -24,6 +24,8 @@
     <link href="{{ asset('css/admin3.css') }}" rel="stylesheet">
     <link href="{{ asset('css/dark_theme.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
 </head>
 <body>
 <div id="app">
@@ -109,11 +111,13 @@
 </div>
 </div>
 </div>
-<script src="{{ asset('js/jquery-3.4.1.min.js') }}" defer></script>
+{{--<script src="{{ asset('js/jquery-3.4.1.min.js') }}" defer></script>--}}
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="{{ asset('js/popper.min.js') }}" defer></script>
 <script src="{{ asset('js/bootstrap.min.js') }}" defer></script>
 <script src="{{ asset('js/jquery.sparkline.min.js') }}" defer></script>
 <script src="{{ asset('js/connect.min.js') }}" defer></script>
 <script src="{{ asset('js/jquery.slimscroll.min.js') }}" defer></script>
+
 </body>
 </html>

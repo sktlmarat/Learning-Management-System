@@ -24,6 +24,8 @@ class CalendarController extends Controller
             foreach ($days as $day) {
                 array_push($dates, [
                     'title' => $session->course->abbreviation,
+//                    .'|'.Carbon::parse($session->date)->format('H:i').'-'.
+//                    Carbon::parse($session->date)->addMinutes($session->duration)->format('H:i') Add for Time
                     'date' => date('Y-m-d', strtotime($day, strtotime($startDate)))
                 ]);
             }

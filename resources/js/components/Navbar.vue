@@ -29,6 +29,9 @@
                         </li>
                     </ul>
                 </li>
+                <router-link v-if="user.role == 'student'" tag="li" to="/calendar">
+                    <a><i class="material-icons-outlined">event</i>Calendar</a>
+                </router-link>
             </ul>
         </div>
     </div>

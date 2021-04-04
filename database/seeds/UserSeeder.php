@@ -4,6 +4,7 @@ use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
 {
+    use \Illuminate\Foundation\Testing\WithFaker;
     /**
      * Run the database seeds.
      *
@@ -77,6 +78,30 @@ class UserSeeder extends Seeder
 //        $marat->courses()->attach($econ);
 //
 
+        \App\Course::find(1)->session()->create([
+            'session_days' => 'monday,tuesday,wednesday,thursday,friday',
+            'frequency' => 1,
+            'date' => '2021-04-18 09:00',
+            'end_date' => '2021-06-18 09:00',
+            'duration' => 60,
+            'description' => ''
+        ]);
+        \App\Course::find(2)->session()->create([
+            'session_days' => 'monday,tuesday,wednesday,thursday,friday',
+            'frequency' => 1,
+            'date' => '2021-04-18 10:00',
+            'end_date' => '2021-06-18 10:00',
+            'duration' => 60,
+            'description' => ''
+        ]);
+        \App\Course::find(3)->session()->create([
+            'session_days' => 'monday,tuesday,wednesday,thursday,friday',
+            'frequency' => 1,
+            'date' => '2021-04-18 11:00',
+            'end_date' => '2021-06-18 11:00',
+            'duration' => 60,
+            'description' => ''
+        ]);
         \App\Course::find(1)->blocks()->create([
             'title' => 'Week 1'
         ]);

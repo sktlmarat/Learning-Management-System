@@ -3146,6 +3146,40 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3354,7 +3388,16 @@ __webpack_require__.r(__webpack_exports__);
         id: '',
         title: ''
       },
-      block_index: -1
+      block_index: -1,
+      add_session: {
+        date: null,
+        duration: null,
+        end_date: null,
+        session_days: [],
+        frequency: null,
+        description: null,
+        course_id: null
+      }
     };
   },
   mounted: function mounted() {
@@ -3378,13 +3421,15 @@ __webpack_require__.r(__webpack_exports__);
     add_course: function add_course() {
       var _this2 = this;
 
-      axios.post('/api/add-course/', {
+      axios.post('/api/add-course', {
         title: this.new_course.title,
         abbreviation: this.newAbbreviation + this.new_course.number,
         department: this.new_course.department.split(".")[0],
         capacity: this.new_course.capacity
       }).then(function (response) {
         console.log(response.data);
+
+        _this2.addSession(response.data.id);
 
         _this2.courses.push(response.data);
 
@@ -3467,16 +3512,50 @@ __webpack_require__.r(__webpack_exports__);
           position: 'top-right'
         });
       });
+    },
+    addSession: function addSession(courseId) {
+      var _this5 = this;
+
+      var formData = new FormData();
+      this.add_session.course_id = courseId;
+
+      for (var _i = 0, _Object$entries = Object.entries(this.add_session); _i < _Object$entries.length; _i++) {
+        var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+            key = _Object$entries$_i[0],
+            value = _Object$entries$_i[1];
+
+        formData.append(key, value);
+      }
+
+      axios.post('/api/session', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(function (response) {
+        _this5.$toast.open({
+          message: 'You successfully created session for the course ' + _this5.new_course.title + '!',
+          type: 'success',
+          position: 'top-right'
+        });
+      })["catch"](function (e) {
+        _this5.errors.push(e);
+
+        _this5.$toast.open({
+          message: 'Error occurred during submission',
+          type: 'error',
+          position: 'top-right'
+        });
+      });
     }
   },
   computed: {
     filteredCourses: function filteredCourses() {
-      var _this5 = this;
+      var _this6 = this;
 
       if (this.search) {
         return this.courses.filter(function (course) {
           var res = course.title + course.abbreviation;
-          return res.toLowerCase().includes(_this5.search.toLowerCase());
+          return res.toLowerCase().includes(_this6.search.toLowerCase());
         });
       } else {
         return this.courses;
@@ -3502,6 +3581,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
 //
 //
 //
@@ -3633,6 +3714,24 @@ __webpack_require__.r(__webpack_exports__);
           position: 'top-right'
         });
       });
+    },
+    checkOverlap: function checkOverlap(course) {
+      var time = course.time.toString().split('-');
+      var lineA = {
+        start: time[0],
+        end: time[1]
+      };
+      var overlap = false;
+      this.courses.forEach(function (item) {
+        if (item.id === course.id || item.time == null) return;
+        var time = item.time.toString().split('-');
+        var lineB = {
+          start: time[0],
+          end: time[1]
+        };
+        if (lineA.start >= lineB.start && lineA.start <= lineB.end || lineA.end >= lineB.start && lineA.end <= lineB.end || lineB.start >= lineA.start && lineB.start <= lineA.end || lineB.end >= lineA.start && lineB.end <= lineA.end) overlap = true;
+      });
+      return overlap;
     }
   },
   computed: {
@@ -4500,57 +4599,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
   name: "Sessions",
@@ -4559,15 +4607,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       course: null,
       sessions: [],
       errors: [],
-      add_session: {
-        date: null,
-        duration: null,
-        end_date: null,
-        session_days: [],
-        frequency: null,
-        description: null,
-        course_id: null
-      },
       edit_session: {
         id: null,
         date: null,
@@ -4598,54 +4637,16 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         _this.errors.push(e);
       });
     },
-    addSession: function addSession() {
+    editSession: function editSession(sessionId) {
       var _this2 = this;
 
-      var formData = new FormData();
-      this.add_session.course_id = this.course.id;
-
-      for (var _i = 0, _Object$entries = Object.entries(this.add_session); _i < _Object$entries.length; _i++) {
-        var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
-            key = _Object$entries$_i[0],
-            value = _Object$entries$_i[1];
-
-        formData.append(key, value);
-      }
-
-      axios.post('/api/session', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then(function (response) {
-        $("#thumbnail_close_add").click();
-
-        _this2.$toast.open({
-          message: 'You successfully created session for the course ' + _this2.course.title + '!',
-          type: 'success',
-          position: 'top-right'
-        });
-
-        _this2.renderPage();
+      axios.get('/api/session/' + sessionId + '/edit').then(function (response) {
+        $("#thumbnail_close").click();
+        _this2.edit_session = response.data;
       })["catch"](function (e) {
         _this2.errors.push(e);
 
         _this2.$toast.open({
-          message: 'Error occurred during submission',
-          type: 'error',
-          position: 'top-right'
-        });
-      });
-    },
-    editSession: function editSession(sessionId) {
-      var _this3 = this;
-
-      axios.get('/api/session/' + sessionId + '/edit').then(function (response) {
-        $("#thumbnail_close").click();
-        _this3.edit_session = response.data;
-      })["catch"](function (e) {
-        _this3.errors.push(e);
-
-        _this3.$toast.open({
           message: 'Error occurred during data fetch!',
           type: 'error',
           position: 'top-right'
@@ -4653,14 +4654,14 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       });
     },
     updateSession: function updateSession(sessionId) {
-      var _this4 = this;
+      var _this3 = this;
 
       var formData = new FormData();
 
-      for (var _i2 = 0, _Object$entries2 = Object.entries(this.edit_session); _i2 < _Object$entries2.length; _i2++) {
-        var _Object$entries2$_i = _slicedToArray(_Object$entries2[_i2], 2),
-            key = _Object$entries2$_i[0],
-            value = _Object$entries2$_i[1];
+      for (var _i = 0, _Object$entries = Object.entries(this.edit_session); _i < _Object$entries.length; _i++) {
+        var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+            key = _Object$entries$_i[0],
+            value = _Object$entries$_i[1];
 
         formData.append(key, value);
       }
@@ -4676,17 +4677,17 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       }).then(function (response) {
         $("#thumbnail_close_update").click();
 
-        _this4.$toast.open({
-          message: 'You successfully updated the session' + _this4.edit_session.description + ' for the course ' + _this4.course.title + '!',
+        _this3.$toast.open({
+          message: 'You successfully updated the session' + _this3.edit_session.description + ' for the course ' + _this3.course.title + '!',
           type: 'success',
           position: 'top-right'
         });
 
-        _this4.renderPage();
+        _this3.renderPage();
       })["catch"](function (e) {
-        _this4.errors.push(e);
+        _this3.errors.push(e);
 
-        _this4.$toast.open({
+        _this3.$toast.open({
           message: 'Error occurred during submission',
           type: 'error',
           position: 'top-right'
@@ -4694,7 +4695,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       });
     },
     deleteSession: function deleteSession(sessionId) {
-      var _this5 = this;
+      var _this4 = this;
 
       var formData = new FormData();
       formData.append("_method", 'DELETE');
@@ -4706,17 +4707,17 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
           'Content-Type': 'multipart/form-data'
         }
       }).then(function (response) {
-        _this5.$toast.open({
-          message: 'You successfully deleted a session from the course ' + _this5.course.title + '!',
+        _this4.$toast.open({
+          message: 'You successfully deleted a session from the course ' + _this4.course.title + '!',
           type: 'success',
           position: 'top-right'
         });
 
-        _this5.renderPage();
+        _this4.renderPage();
       })["catch"](function (e) {
-        _this5.errors.push(e);
+        _this4.errors.push(e);
 
-        _this5.$toast.open({
+        _this4.$toast.open({
           message: 'Error occurred during deletion',
           type: 'error',
           position: 'top-right'
@@ -65729,7 +65730,500 @@ var render = function() {
                             }
                           })
                         ])
-                      ])
+                      ]),
+                      _vm._v(" "),
+                      _c("label", [_vm._v("Session Date")]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.add_session.date,
+                            expression: "add_session.date"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "datetime-local", required: "" },
+                        domProps: { value: _vm.add_session.date },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.add_session,
+                              "date",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("label", [_vm._v("Duration")]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.add_session.duration,
+                            expression: "add_session.duration"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "number",
+                          placeholder: "Duration in minutes",
+                          required: ""
+                        },
+                        domProps: { value: _vm.add_session.duration },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.add_session,
+                              "duration",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("label", [_vm._v("Session End Date")]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.add_session.end_date,
+                            expression: "add_session.end_date"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "datetime-local", required: "" },
+                        domProps: { value: _vm.add_session.end_date },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.add_session,
+                              "end_date",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("label", [_vm._v("Session Days")]),
+                      _vm._v(" "),
+                      _c("div", [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.add_session.session_days,
+                              expression: "add_session.session_days"
+                            }
+                          ],
+                          attrs: { type: "checkbox", value: "sunday" },
+                          domProps: {
+                            checked: Array.isArray(_vm.add_session.session_days)
+                              ? _vm._i(_vm.add_session.session_days, "sunday") >
+                                -1
+                              : _vm.add_session.session_days
+                          },
+                          on: {
+                            change: function($event) {
+                              var $$a = _vm.add_session.session_days,
+                                $$el = $event.target,
+                                $$c = $$el.checked ? true : false
+                              if (Array.isArray($$a)) {
+                                var $$v = "sunday",
+                                  $$i = _vm._i($$a, $$v)
+                                if ($$el.checked) {
+                                  $$i < 0 &&
+                                    _vm.$set(
+                                      _vm.add_session,
+                                      "session_days",
+                                      $$a.concat([$$v])
+                                    )
+                                } else {
+                                  $$i > -1 &&
+                                    _vm.$set(
+                                      _vm.add_session,
+                                      "session_days",
+                                      $$a
+                                        .slice(0, $$i)
+                                        .concat($$a.slice($$i + 1))
+                                    )
+                                }
+                              } else {
+                                _vm.$set(_vm.add_session, "session_days", $$c)
+                              }
+                            }
+                          }
+                        }),
+                        _vm._v("Sun\n                                    "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.add_session.session_days,
+                              expression: "add_session.session_days"
+                            }
+                          ],
+                          attrs: { type: "checkbox", value: "monday" },
+                          domProps: {
+                            checked: Array.isArray(_vm.add_session.session_days)
+                              ? _vm._i(_vm.add_session.session_days, "monday") >
+                                -1
+                              : _vm.add_session.session_days
+                          },
+                          on: {
+                            change: function($event) {
+                              var $$a = _vm.add_session.session_days,
+                                $$el = $event.target,
+                                $$c = $$el.checked ? true : false
+                              if (Array.isArray($$a)) {
+                                var $$v = "monday",
+                                  $$i = _vm._i($$a, $$v)
+                                if ($$el.checked) {
+                                  $$i < 0 &&
+                                    _vm.$set(
+                                      _vm.add_session,
+                                      "session_days",
+                                      $$a.concat([$$v])
+                                    )
+                                } else {
+                                  $$i > -1 &&
+                                    _vm.$set(
+                                      _vm.add_session,
+                                      "session_days",
+                                      $$a
+                                        .slice(0, $$i)
+                                        .concat($$a.slice($$i + 1))
+                                    )
+                                }
+                              } else {
+                                _vm.$set(_vm.add_session, "session_days", $$c)
+                              }
+                            }
+                          }
+                        }),
+                        _vm._v("Mon\n                                    "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.add_session.session_days,
+                              expression: "add_session.session_days"
+                            }
+                          ],
+                          attrs: { type: "checkbox", value: "tuesday" },
+                          domProps: {
+                            checked: Array.isArray(_vm.add_session.session_days)
+                              ? _vm._i(
+                                  _vm.add_session.session_days,
+                                  "tuesday"
+                                ) > -1
+                              : _vm.add_session.session_days
+                          },
+                          on: {
+                            change: function($event) {
+                              var $$a = _vm.add_session.session_days,
+                                $$el = $event.target,
+                                $$c = $$el.checked ? true : false
+                              if (Array.isArray($$a)) {
+                                var $$v = "tuesday",
+                                  $$i = _vm._i($$a, $$v)
+                                if ($$el.checked) {
+                                  $$i < 0 &&
+                                    _vm.$set(
+                                      _vm.add_session,
+                                      "session_days",
+                                      $$a.concat([$$v])
+                                    )
+                                } else {
+                                  $$i > -1 &&
+                                    _vm.$set(
+                                      _vm.add_session,
+                                      "session_days",
+                                      $$a
+                                        .slice(0, $$i)
+                                        .concat($$a.slice($$i + 1))
+                                    )
+                                }
+                              } else {
+                                _vm.$set(_vm.add_session, "session_days", $$c)
+                              }
+                            }
+                          }
+                        }),
+                        _vm._v("Tue\n                                    "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.add_session.session_days,
+                              expression: "add_session.session_days"
+                            }
+                          ],
+                          attrs: { type: "checkbox", value: "wednesday" },
+                          domProps: {
+                            checked: Array.isArray(_vm.add_session.session_days)
+                              ? _vm._i(
+                                  _vm.add_session.session_days,
+                                  "wednesday"
+                                ) > -1
+                              : _vm.add_session.session_days
+                          },
+                          on: {
+                            change: function($event) {
+                              var $$a = _vm.add_session.session_days,
+                                $$el = $event.target,
+                                $$c = $$el.checked ? true : false
+                              if (Array.isArray($$a)) {
+                                var $$v = "wednesday",
+                                  $$i = _vm._i($$a, $$v)
+                                if ($$el.checked) {
+                                  $$i < 0 &&
+                                    _vm.$set(
+                                      _vm.add_session,
+                                      "session_days",
+                                      $$a.concat([$$v])
+                                    )
+                                } else {
+                                  $$i > -1 &&
+                                    _vm.$set(
+                                      _vm.add_session,
+                                      "session_days",
+                                      $$a
+                                        .slice(0, $$i)
+                                        .concat($$a.slice($$i + 1))
+                                    )
+                                }
+                              } else {
+                                _vm.$set(_vm.add_session, "session_days", $$c)
+                              }
+                            }
+                          }
+                        }),
+                        _vm._v("Wed\n                                    "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.add_session.session_days,
+                              expression: "add_session.session_days"
+                            }
+                          ],
+                          attrs: { type: "checkbox", value: "thursday" },
+                          domProps: {
+                            checked: Array.isArray(_vm.add_session.session_days)
+                              ? _vm._i(
+                                  _vm.add_session.session_days,
+                                  "thursday"
+                                ) > -1
+                              : _vm.add_session.session_days
+                          },
+                          on: {
+                            change: function($event) {
+                              var $$a = _vm.add_session.session_days,
+                                $$el = $event.target,
+                                $$c = $$el.checked ? true : false
+                              if (Array.isArray($$a)) {
+                                var $$v = "thursday",
+                                  $$i = _vm._i($$a, $$v)
+                                if ($$el.checked) {
+                                  $$i < 0 &&
+                                    _vm.$set(
+                                      _vm.add_session,
+                                      "session_days",
+                                      $$a.concat([$$v])
+                                    )
+                                } else {
+                                  $$i > -1 &&
+                                    _vm.$set(
+                                      _vm.add_session,
+                                      "session_days",
+                                      $$a
+                                        .slice(0, $$i)
+                                        .concat($$a.slice($$i + 1))
+                                    )
+                                }
+                              } else {
+                                _vm.$set(_vm.add_session, "session_days", $$c)
+                              }
+                            }
+                          }
+                        }),
+                        _vm._v("Thu\n                                    "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.add_session.session_days,
+                              expression: "add_session.session_days"
+                            }
+                          ],
+                          attrs: { type: "checkbox", value: "friday" },
+                          domProps: {
+                            checked: Array.isArray(_vm.add_session.session_days)
+                              ? _vm._i(_vm.add_session.session_days, "friday") >
+                                -1
+                              : _vm.add_session.session_days
+                          },
+                          on: {
+                            change: function($event) {
+                              var $$a = _vm.add_session.session_days,
+                                $$el = $event.target,
+                                $$c = $$el.checked ? true : false
+                              if (Array.isArray($$a)) {
+                                var $$v = "friday",
+                                  $$i = _vm._i($$a, $$v)
+                                if ($$el.checked) {
+                                  $$i < 0 &&
+                                    _vm.$set(
+                                      _vm.add_session,
+                                      "session_days",
+                                      $$a.concat([$$v])
+                                    )
+                                } else {
+                                  $$i > -1 &&
+                                    _vm.$set(
+                                      _vm.add_session,
+                                      "session_days",
+                                      $$a
+                                        .slice(0, $$i)
+                                        .concat($$a.slice($$i + 1))
+                                    )
+                                }
+                              } else {
+                                _vm.$set(_vm.add_session, "session_days", $$c)
+                              }
+                            }
+                          }
+                        }),
+                        _vm._v("Fri\n                                    "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.add_session.session_days,
+                              expression: "add_session.session_days"
+                            }
+                          ],
+                          attrs: { type: "checkbox", value: "saturday" },
+                          domProps: {
+                            checked: Array.isArray(_vm.add_session.session_days)
+                              ? _vm._i(
+                                  _vm.add_session.session_days,
+                                  "saturday"
+                                ) > -1
+                              : _vm.add_session.session_days
+                          },
+                          on: {
+                            change: function($event) {
+                              var $$a = _vm.add_session.session_days,
+                                $$el = $event.target,
+                                $$c = $$el.checked ? true : false
+                              if (Array.isArray($$a)) {
+                                var $$v = "saturday",
+                                  $$i = _vm._i($$a, $$v)
+                                if ($$el.checked) {
+                                  $$i < 0 &&
+                                    _vm.$set(
+                                      _vm.add_session,
+                                      "session_days",
+                                      $$a.concat([$$v])
+                                    )
+                                } else {
+                                  $$i > -1 &&
+                                    _vm.$set(
+                                      _vm.add_session,
+                                      "session_days",
+                                      $$a
+                                        .slice(0, $$i)
+                                        .concat($$a.slice($$i + 1))
+                                    )
+                                }
+                              } else {
+                                _vm.$set(_vm.add_session, "session_days", $$c)
+                              }
+                            }
+                          }
+                        }),
+                        _vm._v("Sat\n                                ")
+                      ]),
+                      _vm._v(" "),
+                      _c("label", [_vm._v("Frequency")]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.add_session.frequency,
+                            expression: "add_session.frequency"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "number", required: "" },
+                        domProps: { value: _vm.add_session.frequency },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.add_session,
+                              "frequency",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("label", [_vm._v("Description")]),
+                      _vm._v(" "),
+                      _c("textarea", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.add_session.description,
+                            expression: "add_session.description"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { required: "" },
+                        domProps: { value: _vm.add_session.description },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.add_session,
+                              "description",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "modal-footer" }, [
@@ -66391,13 +66885,15 @@ var render = function() {
                         _vm._v(" "),
                         _c("td", [_vm._v(_vm._s(course.capacity))]),
                         _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(course.time))]),
+                        _vm._v(" "),
                         _c("td", [
                           _vm.user.courses.some(function(c) {
                             return c.id === course.id
                           })
                             ? _c("p", { staticClass: "text-success" }, [
                                 _vm._v(
-                                  "\n                                            You\n                                            already enrolled"
+                                  "\n                                            You already enrolled"
                                 )
                               ])
                             : _vm.user.schedule_request !== null &&
@@ -66408,7 +66904,13 @@ var render = function() {
                               })
                             ? _c("p", { staticClass: "text-success" }, [
                                 _vm._v(
-                                  "\n                                            You\n                                            already enrolled"
+                                  "\n                                            You already enrolled"
+                                )
+                              ])
+                            : _vm.checkOverlap(course)
+                            ? _c("p", { staticClass: "text-success" }, [
+                                _vm._v(
+                                  "\n                                            Time Overlap"
                                 )
                               ])
                             : _c(
@@ -66471,7 +66973,9 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Department")]),
         _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Capacity")])
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Capacity")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Time")])
       ])
     ])
   }
@@ -67821,578 +68325,10 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-12" }, [
-        _c("div", { staticClass: "blocks" }, [
-          _vm.course
-            ? _c(
-                "button",
-                {
-                  staticClass: "btn btn-primary my-4",
-                  attrs: { "data-toggle": "modal", "data-target": "#AddModal" }
-                },
-                [
-                  _vm._v(
-                    "Add new Session for " +
-                      _vm._s(this.course.title) +
-                      "\n                "
-                  )
-                ]
-              )
-            : _vm._e()
-        ]),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass: "modal fade",
-            attrs: {
-              id: "AddModal",
-              tabindex: "-1",
-              role: "dialog",
-              "aria-labelledby": "exampleModalCenterTitle",
-              "aria-hidden": "true"
-            }
-          },
-          [
-            _c(
-              "div",
-              {
-                staticClass: "modal-dialog modal-dialog-centered",
-                attrs: { role: "document" }
-              },
-              [
-                _c("div", { staticClass: "modal-content" }, [
-                  _c("div", { staticClass: "modal-header" }, [
-                    _vm.course
-                      ? _c(
-                          "h5",
-                          {
-                            staticClass: "modal-title",
-                            attrs: { id: "exampleModalCenterTitle" }
-                          },
-                          [
-                            _vm._v(
-                              "Add New Session for " + _vm._s(this.course.title)
-                            )
-                          ]
-                        )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm._m(0)
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "modal-body" }, [
-                    _c("label", [_vm._v("Session Date")]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.add_session.date,
-                          expression: "add_session.date"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "datetime-local", required: "" },
-                      domProps: { value: _vm.add_session.date },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.add_session, "date", $event.target.value)
-                        }
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("label", [_vm._v("Duration")]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.add_session.duration,
-                          expression: "add_session.duration"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: {
-                        type: "number",
-                        placeholder: "Duration in minutes",
-                        required: ""
-                      },
-                      domProps: { value: _vm.add_session.duration },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(
-                            _vm.add_session,
-                            "duration",
-                            $event.target.value
-                          )
-                        }
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("label", [_vm._v("Session End Date")]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.add_session.end_date,
-                          expression: "add_session.end_date"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "datetime-local", required: "" },
-                      domProps: { value: _vm.add_session.end_date },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(
-                            _vm.add_session,
-                            "end_date",
-                            $event.target.value
-                          )
-                        }
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("label", [_vm._v("Session Days")]),
-                    _vm._v(" "),
-                    _c("div", [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.add_session.session_days,
-                            expression: "add_session.session_days"
-                          }
-                        ],
-                        attrs: { type: "checkbox", value: "sunday" },
-                        domProps: {
-                          checked: Array.isArray(_vm.add_session.session_days)
-                            ? _vm._i(_vm.add_session.session_days, "sunday") >
-                              -1
-                            : _vm.add_session.session_days
-                        },
-                        on: {
-                          change: function($event) {
-                            var $$a = _vm.add_session.session_days,
-                              $$el = $event.target,
-                              $$c = $$el.checked ? true : false
-                            if (Array.isArray($$a)) {
-                              var $$v = "sunday",
-                                $$i = _vm._i($$a, $$v)
-                              if ($$el.checked) {
-                                $$i < 0 &&
-                                  _vm.$set(
-                                    _vm.add_session,
-                                    "session_days",
-                                    $$a.concat([$$v])
-                                  )
-                              } else {
-                                $$i > -1 &&
-                                  _vm.$set(
-                                    _vm.add_session,
-                                    "session_days",
-                                    $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                                  )
-                              }
-                            } else {
-                              _vm.$set(_vm.add_session, "session_days", $$c)
-                            }
-                          }
-                        }
-                      }),
-                      _vm._v("Sun\n                                "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.add_session.session_days,
-                            expression: "add_session.session_days"
-                          }
-                        ],
-                        attrs: { type: "checkbox", value: "monday" },
-                        domProps: {
-                          checked: Array.isArray(_vm.add_session.session_days)
-                            ? _vm._i(_vm.add_session.session_days, "monday") >
-                              -1
-                            : _vm.add_session.session_days
-                        },
-                        on: {
-                          change: function($event) {
-                            var $$a = _vm.add_session.session_days,
-                              $$el = $event.target,
-                              $$c = $$el.checked ? true : false
-                            if (Array.isArray($$a)) {
-                              var $$v = "monday",
-                                $$i = _vm._i($$a, $$v)
-                              if ($$el.checked) {
-                                $$i < 0 &&
-                                  _vm.$set(
-                                    _vm.add_session,
-                                    "session_days",
-                                    $$a.concat([$$v])
-                                  )
-                              } else {
-                                $$i > -1 &&
-                                  _vm.$set(
-                                    _vm.add_session,
-                                    "session_days",
-                                    $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                                  )
-                              }
-                            } else {
-                              _vm.$set(_vm.add_session, "session_days", $$c)
-                            }
-                          }
-                        }
-                      }),
-                      _vm._v("Mon\n                                "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.add_session.session_days,
-                            expression: "add_session.session_days"
-                          }
-                        ],
-                        attrs: { type: "checkbox", value: "tuesday" },
-                        domProps: {
-                          checked: Array.isArray(_vm.add_session.session_days)
-                            ? _vm._i(_vm.add_session.session_days, "tuesday") >
-                              -1
-                            : _vm.add_session.session_days
-                        },
-                        on: {
-                          change: function($event) {
-                            var $$a = _vm.add_session.session_days,
-                              $$el = $event.target,
-                              $$c = $$el.checked ? true : false
-                            if (Array.isArray($$a)) {
-                              var $$v = "tuesday",
-                                $$i = _vm._i($$a, $$v)
-                              if ($$el.checked) {
-                                $$i < 0 &&
-                                  _vm.$set(
-                                    _vm.add_session,
-                                    "session_days",
-                                    $$a.concat([$$v])
-                                  )
-                              } else {
-                                $$i > -1 &&
-                                  _vm.$set(
-                                    _vm.add_session,
-                                    "session_days",
-                                    $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                                  )
-                              }
-                            } else {
-                              _vm.$set(_vm.add_session, "session_days", $$c)
-                            }
-                          }
-                        }
-                      }),
-                      _vm._v("Tue\n                                "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.add_session.session_days,
-                            expression: "add_session.session_days"
-                          }
-                        ],
-                        attrs: { type: "checkbox", value: "wednesday" },
-                        domProps: {
-                          checked: Array.isArray(_vm.add_session.session_days)
-                            ? _vm._i(
-                                _vm.add_session.session_days,
-                                "wednesday"
-                              ) > -1
-                            : _vm.add_session.session_days
-                        },
-                        on: {
-                          change: function($event) {
-                            var $$a = _vm.add_session.session_days,
-                              $$el = $event.target,
-                              $$c = $$el.checked ? true : false
-                            if (Array.isArray($$a)) {
-                              var $$v = "wednesday",
-                                $$i = _vm._i($$a, $$v)
-                              if ($$el.checked) {
-                                $$i < 0 &&
-                                  _vm.$set(
-                                    _vm.add_session,
-                                    "session_days",
-                                    $$a.concat([$$v])
-                                  )
-                              } else {
-                                $$i > -1 &&
-                                  _vm.$set(
-                                    _vm.add_session,
-                                    "session_days",
-                                    $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                                  )
-                              }
-                            } else {
-                              _vm.$set(_vm.add_session, "session_days", $$c)
-                            }
-                          }
-                        }
-                      }),
-                      _vm._v("Wed\n                                "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.add_session.session_days,
-                            expression: "add_session.session_days"
-                          }
-                        ],
-                        attrs: { type: "checkbox", value: "thursday" },
-                        domProps: {
-                          checked: Array.isArray(_vm.add_session.session_days)
-                            ? _vm._i(_vm.add_session.session_days, "thursday") >
-                              -1
-                            : _vm.add_session.session_days
-                        },
-                        on: {
-                          change: function($event) {
-                            var $$a = _vm.add_session.session_days,
-                              $$el = $event.target,
-                              $$c = $$el.checked ? true : false
-                            if (Array.isArray($$a)) {
-                              var $$v = "thursday",
-                                $$i = _vm._i($$a, $$v)
-                              if ($$el.checked) {
-                                $$i < 0 &&
-                                  _vm.$set(
-                                    _vm.add_session,
-                                    "session_days",
-                                    $$a.concat([$$v])
-                                  )
-                              } else {
-                                $$i > -1 &&
-                                  _vm.$set(
-                                    _vm.add_session,
-                                    "session_days",
-                                    $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                                  )
-                              }
-                            } else {
-                              _vm.$set(_vm.add_session, "session_days", $$c)
-                            }
-                          }
-                        }
-                      }),
-                      _vm._v("Thu\n                                "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.add_session.session_days,
-                            expression: "add_session.session_days"
-                          }
-                        ],
-                        attrs: { type: "checkbox", value: "friday" },
-                        domProps: {
-                          checked: Array.isArray(_vm.add_session.session_days)
-                            ? _vm._i(_vm.add_session.session_days, "friday") >
-                              -1
-                            : _vm.add_session.session_days
-                        },
-                        on: {
-                          change: function($event) {
-                            var $$a = _vm.add_session.session_days,
-                              $$el = $event.target,
-                              $$c = $$el.checked ? true : false
-                            if (Array.isArray($$a)) {
-                              var $$v = "friday",
-                                $$i = _vm._i($$a, $$v)
-                              if ($$el.checked) {
-                                $$i < 0 &&
-                                  _vm.$set(
-                                    _vm.add_session,
-                                    "session_days",
-                                    $$a.concat([$$v])
-                                  )
-                              } else {
-                                $$i > -1 &&
-                                  _vm.$set(
-                                    _vm.add_session,
-                                    "session_days",
-                                    $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                                  )
-                              }
-                            } else {
-                              _vm.$set(_vm.add_session, "session_days", $$c)
-                            }
-                          }
-                        }
-                      }),
-                      _vm._v("Fri\n                                "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.add_session.session_days,
-                            expression: "add_session.session_days"
-                          }
-                        ],
-                        attrs: { type: "checkbox", value: "saturday" },
-                        domProps: {
-                          checked: Array.isArray(_vm.add_session.session_days)
-                            ? _vm._i(_vm.add_session.session_days, "saturday") >
-                              -1
-                            : _vm.add_session.session_days
-                        },
-                        on: {
-                          change: function($event) {
-                            var $$a = _vm.add_session.session_days,
-                              $$el = $event.target,
-                              $$c = $$el.checked ? true : false
-                            if (Array.isArray($$a)) {
-                              var $$v = "saturday",
-                                $$i = _vm._i($$a, $$v)
-                              if ($$el.checked) {
-                                $$i < 0 &&
-                                  _vm.$set(
-                                    _vm.add_session,
-                                    "session_days",
-                                    $$a.concat([$$v])
-                                  )
-                              } else {
-                                $$i > -1 &&
-                                  _vm.$set(
-                                    _vm.add_session,
-                                    "session_days",
-                                    $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                                  )
-                              }
-                            } else {
-                              _vm.$set(_vm.add_session, "session_days", $$c)
-                            }
-                          }
-                        }
-                      }),
-                      _vm._v("Sat\n                            ")
-                    ]),
-                    _vm._v(" "),
-                    _c("label", [_vm._v("Frequency")]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.add_session.frequency,
-                          expression: "add_session.frequency"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "number", required: "" },
-                      domProps: { value: _vm.add_session.frequency },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(
-                            _vm.add_session,
-                            "frequency",
-                            $event.target.value
-                          )
-                        }
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("label", [_vm._v("Description")]),
-                    _vm._v(" "),
-                    _c("textarea", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.add_session.description,
-                          expression: "add_session.description"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { required: "" },
-                      domProps: { value: _vm.add_session.description },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(
-                            _vm.add_session,
-                            "description",
-                            $event.target.value
-                          )
-                        }
-                      }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "modal-footer" }, [
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-secondary",
-                        attrs: {
-                          id: "mod_close",
-                          type: "button",
-                          "data-dismiss": "modal"
-                        }
-                      },
-                      [_vm._v("Close\n                            ")]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-primary",
-                        attrs: { type: "button" },
-                        on: {
-                          click: function($event) {
-                            return _vm.addSession()
-                          }
-                        }
-                      },
-                      [_vm._v("Save changes")]
-                    )
-                  ])
-                ])
-              ]
-            )
-          ]
-        )
-      ])
-    ]),
-    _vm._v(" "),
     _c("div", { staticClass: "row container" }, [
       _c("div", { staticClass: "col-12" }, [
         _c("table", { staticClass: "table", attrs: { id: "table_id" } }, [
-          _vm._m(1),
+          _vm._m(0),
           _vm._v(" "),
           _c(
             "tbody",
@@ -68490,7 +68426,7 @@ var render = function() {
                     )
                   : _vm._e(),
                 _vm._v(" "),
-                _vm._m(2)
+                _vm._m(1)
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
@@ -68992,32 +68928,6 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      {
-        staticClass: "close",
-        attrs: {
-          type: "button",
-          "data-dismiss": "modal",
-          "aria-label": "Close"
-        }
-      },
-      [
-        _c(
-          "i",
-          {
-            staticClass: "material-icons",
-            attrs: { id: "thumbnail_close_add" }
-          },
-          [_vm._v("close")]
-        )
-      ]
-    )
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

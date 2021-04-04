@@ -5,10 +5,11 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, HasRelationships;
 
     public function courses() {
         return $this->belongsToMany(Course::class);
@@ -32,6 +33,11 @@ class User extends Authenticatable
 
     public function grades() {
         return $this->hasMany(Grade::class, 'student_id');
+    }
+
+    public function session()
+    {
+        return $this->hasManyDeep(Session::class,['course_user',Course::class]);
     }
 
     /**

@@ -13,6 +13,7 @@ import MyGrades from "./components/MyGrades";
 import Classes from "./components/Classes";
 import Sessions from "./components/Sessions";
 import Attendance from "./components/Attendance";
+import Calendar from "./components/Calendar";
 
 Vue.use(VueRouter);
 
@@ -68,6 +69,11 @@ export default new VueRouter({
             name: 'attendance',
             component: Attendance,
             props: true
+        },
+        {
+            path: '/calendar',
+            name: 'calendar',
+            component: Calendar
         },
     ],
     mode: 'history',

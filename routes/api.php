@@ -305,3 +305,5 @@ Route::get('session/{session}/classes','CourseController@getSessionAttendance');
 Route::get('course/{course}/students','CourseController@getStudents');
 
 Route::resource('attendance',AttendanceController::class);
+
+Route::get('calendar/{student}','CalendarController@getSchedule');

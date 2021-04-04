@@ -13,7 +13,7 @@ class AttendanceTypesSeeder extends Seeder
     public function run()
     {
         Model::unguard();
-        \App\AttendanceType::create([
+        \App\AttendanceType::insert([
             [
                 'acronym' => 'P',
                 'description' => 'Present',

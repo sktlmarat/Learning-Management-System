@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\User;
@@ -37,7 +38,13 @@ Route::get('/course/block/{id}', function ($id) {
 });
 
 Route::get('/all-courses', function () {
-    return Course::with(['department'])->orderBy('title')->get();
+    $courses = Course::with(['department','session'])->orderBy('title')->get();
+    $courses->map(function ($course){
+        if(isset($course->session[0]))
+            $course->time = Carbon::parse($course->session[0]->date)->format('H:i')
+                .'-'.Carbon::parse($course->session[0]->date)->addMinutes($course->session[0]->duration)->format('H:i');
+    });
+    return $courses;
 });
 
 Route::get('/all-users', function () {

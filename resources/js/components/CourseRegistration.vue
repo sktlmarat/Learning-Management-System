@@ -23,7 +23,7 @@
                                 <p v-if="user.registration_status === 'approved'">Registration status: <span class="text-success">Approved</span></p>
                                 <p v-if="user.registration_status === 'rejected'">Registration status: <span class="text-danger">Rejected</span></p>
                                 <div class="col-md-6 p-0 my-4">
-                                <input v-model="search" class="form-control" id="exampleInputEmail1" placeholder="Search title">
+                                    <input v-model="search" class="form-control" id="exampleInputEmail1" placeholder="Search title">
                                 </div>
                                 <table class="table">
                                     <thead>
@@ -32,6 +32,7 @@
                                         <th scope="col">Abbreviation</th>
                                         <th scope="col">Department</th>
                                         <th scope="col">Capacity</th>
+                                        <th scope="col">Time</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -40,13 +41,14 @@
                                         <td>{{ course.abbreviation }}</td>
                                         <td>{{ course.department.name }}</td>
                                         <td>{{ course.capacity }}</td>
+                                        <td>{{ course.time }}</td>
                                         <td>
                                             <p v-if="user.courses.some(c => c.id === course.id)" class="text-success">
-                                                You
-                                                already enrolled</p>
+                                                You already enrolled</p>
                                             <p v-else-if="user.schedule_request !== null && user.schedule_request.courses.some(c => c.id === course.id)" class="text-success">
-                                                You
-                                                already enrolled</p>
+                                                You already enrolled</p>
+                                            <p v-else-if="checkOverlap(course)" class="text-success">
+                                                Time Overlap</p>
                                             <button v-else @click="register(user.id, course.id, course.title)" class="btn btn-primary">Enroll</button>
                                         </td>
                                     </tr>
@@ -119,14 +121,36 @@ export default {
                         position: 'top-right'
                     });
                 });
-        }
         },
+        checkOverlap(course) {
+            let time = course.time.toString().split('-');
+            let lineA = {
+                start:time[0],
+                end:time[1]
+            }
+            let overlap = false;
+            this.courses.forEach(function(item){
+                if(item.id === course.id || item.time == null) return;
+                let time = item.time.toString().split('-');
+                let lineB = {
+                    start:time[0],
+                    end:time[1]
+                }
+                if(lineA.start >= lineB.start && lineA.start <= lineB.end ||
+                    lineA.end >= lineB.start && lineA.end <= lineB.end ||
+                    lineB.start >= lineA.start && lineB.start <= lineA.end ||
+                    lineB.end >= lineA.start && lineB.end <= lineA.end)
+                    overlap = true;
+            });
+            return overlap;
+        }
+    },
     computed: {
         filteredCourses() {
             if(this.courses){
-            return this.courses.filter(course => {
-                return course.title.toLowerCase().includes(this.search.toLowerCase());
-            });
+                return this.courses.filter(course => {
+                    return course.title.toLowerCase().includes(this.search.toLowerCase());
+                });
             }else{
                 return this.courses;
             }

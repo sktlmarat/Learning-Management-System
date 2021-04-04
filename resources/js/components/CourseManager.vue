@@ -61,6 +61,28 @@
                                             <input v-model="new_course.capacity" type="number" class="form-control">
                                         </div>
                                     </div>
+
+                                    <label>Session Date</label>
+                                    <input type="datetime-local" v-model="add_session.date" class="form-control" required>
+                                    <label>Duration</label>
+                                    <input type="number" v-model="add_session.duration" class="form-control"
+                                           placeholder="Duration in minutes" required>
+                                    <label>Session End Date</label>
+                                    <input type="datetime-local" v-model="add_session.end_date" class="form-control" required>
+                                    <label>Session Days</label>
+                                    <div>
+                                        <input type="checkbox" v-model="add_session.session_days" value="sunday">Sun
+                                        <input type="checkbox" v-model="add_session.session_days" value="monday">Mon
+                                        <input type="checkbox" v-model="add_session.session_days" value="tuesday">Tue
+                                        <input type="checkbox" v-model="add_session.session_days" value="wednesday">Wed
+                                        <input type="checkbox" v-model="add_session.session_days" value="thursday">Thu
+                                        <input type="checkbox" v-model="add_session.session_days" value="friday">Fri
+                                        <input type="checkbox" v-model="add_session.session_days" value="saturday">Sat
+                                    </div>
+                                    <label>Frequency</label>
+                                    <input type="number" v-model="add_session.frequency" class="form-control" required>
+                                    <label>Description</label>
+                                    <textarea v-model="add_session.description" class="form-control" required></textarea>
                                 </div>
                                 <div class="modal-footer">
                                     <button id="mod_close" type="button" class="btn btn-secondary"
@@ -207,7 +229,16 @@ export default {
                 id: '',
                 title: ''
             },
-            block_index: -1
+            block_index: -1,
+            add_session:{
+                date : null,
+                duration : null,
+                end_date : null,
+                session_days : [],
+                frequency : null,
+                description : null,
+                course_id : null,
+            },
         }
     },
     mounted() {
@@ -229,7 +260,7 @@ export default {
             });
         },
         add_course() {
-            axios.post('/api/add-course/', {
+            axios.post('/api/add-course', {
                 title: this.new_course.title,
                 abbreviation: this.newAbbreviation + this.new_course.number,
                 department: this.new_course.department.split(".")[0],
@@ -237,6 +268,7 @@ export default {
             })
                 .then(response => {
                     console.log(response.data);
+                    this.addSession(response.data.id);
                     this.courses.push(response.data);
                     $("#mod_close").click();
                     this.$toast.open({
@@ -312,7 +344,33 @@ export default {
                         position: 'top-right'
                     });
                 });
-        }
+        },
+        addSession(courseId){
+            let formData = new FormData();
+            this.add_session.course_id = courseId;
+            for (const [key, value] of Object.entries(this.add_session)) {
+                formData.append(key, value);
+            }
+            axios.post('/api/session', formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }).then(response => {
+                this.$toast.open({
+                    message: 'You successfully created session for the course '+this.new_course.title+'!',
+                    type: 'success',
+                    position: 'top-right'
+                });
+            }).catch(e => {
+                this.errors.push(e);
+                this.$toast.open({
+                    message: 'Error occurred during submission',
+                    type: 'error',
+                    position: 'top-right'
+                });
+            });
+        },
     },
     computed: {
         filteredCourses() {

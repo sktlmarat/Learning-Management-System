@@ -19,8 +19,10 @@
 - Submit assignment from student side
 
 ##Todo Features
-- Track attendance (Instructor)
 - Divide students by the year of study
 - Add video files (course materials)
 - Fix max grade
 - Make timeslots
+
+#Completed Features
+- Track attendance (Instructor)

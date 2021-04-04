@@ -289,3 +289,12 @@ Route::post('/edit-grade', function (Request $request) {
 Route::get('get-grade/{user_id}', function ($user_id) {
     return User::find($user_id)->courses->fresh(['assignments', 'assignments.grades']);
 });
+
+
+Route::resource('session',SessionController::class);
+//Route::resource('course',CourseController::class);
+Route::get('course/{course}/session','CourseController@getSessions');
+Route::get('session/{session}/classes','CourseController@getSessionAttendance');
+Route::get('course/{course}/students','CourseController@getStudents');
+
+Route::resource('attendance',AttendanceController::class);

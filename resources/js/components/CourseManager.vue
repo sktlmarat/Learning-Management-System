@@ -151,6 +151,34 @@
                             </div>
                         </div>
                     </div>
+                    <div class="modal fade" id="AddInstructor" tabindex="-1" role="dialog"
+                         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Add Instructor</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <i class="material-icons">close</i>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-12">
+                                            <label>Capacity</label>
+                                            <select v-model="add_instructor.user_id" class="form-control">
+                                                <option v-for="instructor in instructors" :value="instructor.id">{{ instructor.name }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="add_instructor_close" type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                    </button>
+                                    <button type="button" @click="addInstructorToCourse()" class="btn btn-primary">Add Instructor</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog"
                          aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -188,6 +216,9 @@
                             <td>{{ course.department.name }}</td>
                             <td>{{ course.capacity }}</td>
                             <td>
+                                <button data-toggle="modal" @click="setCourseIdForInstructorAddition(course.id)"
+                                        data-target="#AddInstructor" class="btn btn-warning btn-sm">Add Instructor
+                                </button>
                                 <button data-toggle="modal" @click="editHelper(course.id, course.title, course.abbreviation, course.department.id + '.' + course.department.abbreviation, course.capacity, i)"
                                         data-target="#EditModal" class="btn btn-warning btn-sm">Edit
                                 </button>
@@ -212,6 +243,11 @@ export default {
             errors: [],
             search: '',
             departments: '',
+            instructors: [],
+            add_instructor:{
+                course_id: null,
+                user_id: null,
+            },
             new_course: {
                 title: '',
                 department: '',
@@ -257,6 +293,17 @@ export default {
                     this.departments = response.data;
                 }).catch(e => {
                 this.errors.push(e)
+            });
+            axios.get('/api/instructors')
+                .then(response => {
+                    this.instructors = response.data;
+                }).catch(e => {
+                this.errors.push(e);
+                this.$toast.open({
+                    message: 'Error occurred during instructor fetch',
+                    type: 'error',
+                    position: 'top-right'
+                });
             });
         },
         add_course() {
@@ -371,6 +418,33 @@ export default {
                 });
             });
         },
+        addInstructorToCourse(){
+            let formData = new FormData();
+            for (const [key, value] of Object.entries(this.add_instructor)) {
+                formData.append(key, value);
+            }
+            axios.post('/api/course/instructor',formData,{
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }).then(response => {
+                this.$toast.open({
+                    message: 'You successfully added instructor',
+                    type: 'success',
+                    position: 'top-right'
+                });
+            }).catch(e => {
+                this.errors.push(e);
+                this.$toast.open({
+                    message: 'Error occurred during submission',
+                    type: 'error',
+                    position: 'top-right'
+                });
+            });
+        },
+        setCourseIdForInstructorAddition(courseId){
+            this.add_instructor.course_id=courseId
+        }
     },
     computed: {
         filteredCourses() {

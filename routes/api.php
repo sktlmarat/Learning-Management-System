@@ -306,7 +306,11 @@ Route::resource('session',SessionController::class);
 Route::get('course/{course}/session','CourseController@getSessions');
 Route::get('session/{session}/classes','CourseController@getSessionAttendance');
 Route::get('course/{course}/students','CourseController@getStudents');
+Route::post('course/instructor','CourseController@addInstructorToStudents');
 
 Route::resource('attendance',AttendanceController::class);
 
 Route::get('calendar/{student}','CalendarController@getSchedule');
+Route::get('instructors',function(){
+    return User::where('role','instructor')->get();
+});

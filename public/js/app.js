@@ -20319,6 +20319,37 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
   data: function data() {
@@ -20327,6 +20358,11 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       errors: [],
       search: '',
       departments: '',
+      instructors: [],
+      add_instructor: {
+        course_id: null,
+        user_id: null
+      },
       new_course: {
         title: '',
         department: '',
@@ -20372,6 +20408,17 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         _this.departments = response.data;
       })["catch"](function (e) {
         _this.errors.push(e);
+      });
+      axios.get('/api/instructors').then(function (response) {
+        _this.instructors = response.data;
+      })["catch"](function (e) {
+        _this.errors.push(e);
+
+        _this.$toast.open({
+          message: 'Error occurred during instructor fetch',
+          type: 'error',
+          position: 'top-right'
+        });
       });
     },
     add_course: function add_course() {
@@ -20502,16 +20549,52 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
           position: 'top-right'
         });
       });
+    },
+    addInstructorToCourse: function addInstructorToCourse() {
+      var _this6 = this;
+
+      var formData = new FormData();
+
+      for (var _i2 = 0, _Object$entries2 = Object.entries(this.add_instructor); _i2 < _Object$entries2.length; _i2++) {
+        var _Object$entries2$_i = _slicedToArray(_Object$entries2[_i2], 2),
+            key = _Object$entries2$_i[0],
+            value = _Object$entries2$_i[1];
+
+        formData.append(key, value);
+      }
+
+      axios.post('/api/course/instructor', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(function (response) {
+        _this6.$toast.open({
+          message: 'You successfully added instructor',
+          type: 'success',
+          position: 'top-right'
+        });
+      })["catch"](function (e) {
+        _this6.errors.push(e);
+
+        _this6.$toast.open({
+          message: 'Error occurred during submission',
+          type: 'error',
+          position: 'top-right'
+        });
+      });
+    },
+    setCourseIdForInstructorAddition: function setCourseIdForInstructorAddition(courseId) {
+      this.add_instructor.course_id = courseId;
     }
   },
   computed: {
     filteredCourses: function filteredCourses() {
-      var _this6 = this;
+      var _this7 = this;
 
       if (this.search) {
         return this.courses.filter(function (course) {
           var res = course.title + course.abbreviation;
-          return res.toLowerCase().includes(_this6.search.toLowerCase());
+          return res.toLowerCase().includes(_this7.search.toLowerCase());
         });
       } else {
         return this.courses;
@@ -65691,7 +65774,7 @@ var render = function() {
             {
               staticClass: "modal fade",
               attrs: {
-                id: "DeleteModal",
+                id: "AddInstructor",
                 tabindex: "-1",
                 role: "dialog",
                 "aria-labelledby": "exampleModalCenterTitle",
@@ -65708,6 +65791,114 @@ var render = function() {
                 [
                   _c("div", { staticClass: "modal-content" }, [
                     _vm._m(2),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "modal-body" }, [
+                      _c("div", { staticClass: "form-row" }, [
+                        _c("div", { staticClass: "form-group col-12" }, [
+                          _c("label", [_vm._v("Capacity")]),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.add_instructor.user_id,
+                                  expression: "add_instructor.user_id"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    _vm.add_instructor,
+                                    "user_id",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            _vm._l(_vm.instructors, function(instructor) {
+                              return _c(
+                                "option",
+                                { domProps: { value: instructor.id } },
+                                [_vm._v(_vm._s(instructor.name))]
+                              )
+                            }),
+                            0
+                          )
+                        ])
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "modal-footer" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-secondary",
+                          attrs: {
+                            id: "add_instructor_close",
+                            type: "button",
+                            "data-dismiss": "modal"
+                          }
+                        },
+                        [_vm._v("Close\n                                ")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { type: "button" },
+                          on: {
+                            click: function($event) {
+                              return _vm.addInstructorToCourse()
+                            }
+                          }
+                        },
+                        [_vm._v("Add Instructor")]
+                      )
+                    ])
+                  ])
+                ]
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "modal fade",
+              attrs: {
+                id: "DeleteModal",
+                tabindex: "-1",
+                role: "dialog",
+                "aria-labelledby": "exampleModalCenterTitle",
+                "aria-hidden": "true"
+              }
+            },
+            [
+              _c(
+                "div",
+                {
+                  staticClass: "modal-dialog modal-dialog-centered",
+                  attrs: { role: "document" }
+                },
+                [
+                  _c("div", { staticClass: "modal-content" }, [
+                    _vm._m(3),
                     _vm._v(" "),
                     _c("div", { staticClass: "modal-body" }, [
                       _c("p", [
@@ -65754,7 +65945,7 @@ var render = function() {
           ),
           _vm._v(" "),
           _c("table", { staticClass: "table" }, [
-            _vm._m(3),
+            _vm._m(4),
             _vm._v(" "),
             _c(
               "tbody",
@@ -65771,6 +65962,25 @@ var render = function() {
                   _c("td", [_vm._v(_vm._s(course.capacity))]),
                   _vm._v(" "),
                   _c("td", [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-warning btn-sm",
+                        attrs: {
+                          "data-toggle": "modal",
+                          "data-target": "#AddInstructor"
+                        },
+                        on: {
+                          click: function($event) {
+                            return _vm.setCourseIdForInstructorAddition(
+                              course.id
+                            )
+                          }
+                        }
+                      },
+                      [_vm._v("Add Instructor\n                            ")]
+                    ),
+                    _vm._v(" "),
                     _c(
                       "button",
                       {
@@ -65852,6 +66062,27 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "modal-header" }, [
       _c("h5", { staticClass: "modal-title" }, [_vm._v("Edit Course")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("i", { staticClass: "material-icons" }, [_vm._v("close")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title" }, [_vm._v("Add Instructor")]),
       _vm._v(" "),
       _c(
         "button",

@@ -60,4 +60,10 @@ class CourseController extends Controller
     public function getStudents(Course $course){
         return $course->students;
     }
+
+    public function addInstructorToStudents(Request $request){
+        return Course::find($request->course_id)->users()->attach([
+            'user_id' => $request->user_id
+        ]);
+    }
 }

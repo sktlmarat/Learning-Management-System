@@ -33,6 +33,7 @@
                                         <th scope="col">Department</th>
                                         <th scope="col">Capacity</th>
                                         <th scope="col">Time</th>
+                                        <th scope="col">Date</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -41,6 +42,7 @@
                                         <td>{{ course.abbreviation }}</td>
                                         <td>{{ course.department.name }}</td>
                                         <td>{{ course.capacity }}</td>
+                                        <td>{{ course.date }}</td>
                                         <td>{{ course.time }}</td>
                                         <td>
                                             <p v-if="user.courses.some(c => c.id === course.id)" class="text-success">
@@ -124,13 +126,18 @@ export default {
         },
         checkOverlap(course) {
             let time = course.time.toString().split('-');
+            let dateB = course.date.toString().split(' to ');
+            let daysA = course.day.toString().split(',');
             let lineA = {
                 start:time[0],
                 end:time[1]
             }
-            let overlap = false;
+            let overlapTime = false;
+            let overlapDate = false;
+            let overlapDay = false;
             this.courses.forEach(function(item){
                 if(item.id === course.id || item.time == null) return;
+                //check time overlap below
                 let time = item.time.toString().split('-');
                 let lineB = {
                     start:time[0],
@@ -140,9 +147,19 @@ export default {
                     lineA.end >= lineB.start && lineA.end <= lineB.end ||
                     lineB.start >= lineA.start && lineB.start <= lineA.end ||
                     lineB.end >= lineA.start && lineB.end <= lineA.end)
-                    overlap = true;
+                    overlapTime = true;
+                //check date overlap below
+                let dateA = item.date.toString().split(' to ');
+                let a_start=dateA[0]; let a_end=dateA[1];let b_start=dateB[0];let b_end=dateB[1];
+                if (a_start <= b_start && b_start <= a_end) overlapDate = true; // b starts in a
+                if (a_start <= b_end   && b_end   <= a_end) overlapDate =  true; // b ends in a
+                if (b_start <  a_start && a_end   <  b_end) overlapDate =  true; // a in b
+                //check day overlap below
+                let daysB = item.day.toString().split(',');
+                overlapDay = daysA.some(r=>daysB.indexOf(r) >= 0);
+
             });
-            return overlap;
+            return (overlapTime && overlapDate && overlapDay);
         }
     },
     computed: {

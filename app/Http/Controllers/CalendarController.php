@@ -22,11 +22,14 @@ class CalendarController extends Controller
         $dates = [];
         while($startDate->lt($endDate)) {
             foreach ($days as $day) {
+                $date = date('Y-m-d', strtotime($day, strtotime($startDate)));
                 array_push($dates, [
                     'title' => $session->course->abbreviation,
-//                    .'|'.Carbon::parse($session->date)->format('H:i').'-'.
+//                    .'|'.Carbon::parse($session->date)->format('H:i:s').'-'.
 //                    Carbon::parse($session->date)->addMinutes($session->duration)->format('H:i') Add for Time
-                    'date' => date('Y-m-d', strtotime($day, strtotime($startDate)))
+                    'start' => $date.'T'.Carbon::parse($session->date)->format('H:i:s'),
+                    'end' => $date.'T'.Carbon::parse($session->date)
+                            ->addMinutes($session->duration)->format('H:i:s'),
                 ]);
             }
             $startDate->addWeeks($session->frequency);

@@ -20,9 +20,12 @@
 
 ##Todo Features
 - Divide students by the year of study
-- Add video files (course materials)
 - Fix max grade
 
 #Completed Features
 - Track attendance (Instructor)
 - Make timeslots
+- Add video files (course materials)
+
+- Course Registration Overlap
+- Course Addition with a session and Instructor

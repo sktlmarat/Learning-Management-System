@@ -32,8 +32,9 @@
                                         <th scope="col">Abbreviation</th>
                                         <th scope="col">Department</th>
                                         <th scope="col">Capacity</th>
-                                        <th scope="col">Time</th>
                                         <th scope="col">Date</th>
+                                        <th scope="col">Time</th>
+                                        <th scope="col">Days</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -44,6 +45,7 @@
                                         <td>{{ course.capacity }}</td>
                                         <td>{{ course.date }}</td>
                                         <td>{{ course.time }}</td>
+                                        <td>{{ course.day }}</td>
                                         <td>
                                             <p v-if="user.courses.some(c => c.id === course.id)" class="text-success">
                                                 You already enrolled</p>

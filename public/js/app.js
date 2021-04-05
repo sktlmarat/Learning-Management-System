@@ -19332,7 +19332,9 @@ __webpack_require__.r(__webpack_exports__);
           position: 'top-right'
         });
 
-        router.go('/session/' + _this2.session.id);
+        router.push({
+          path: '/session/' + _this2.session.id
+        });
       })["catch"](function (e) {
         _this2.errors.push(e);
 
@@ -19846,6 +19848,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -20688,6 +20691,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
   data: function data() {
@@ -20879,6 +20884,147 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     courseChunks: function courseChunks() {
       return _.chunk(Object.values(this.user.courses), 2);
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/EditAttendance.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/EditAttendance.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../router */ "./resources/js/router.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "Attendance",
+  props: ['classroom', 'session'],
+  data: function data() {
+    return {
+      students: [],
+      attendances: [],
+      add_attendance: {
+        student_id: [],
+        attendance_type_id: [],
+        description: []
+      },
+      edit_attendance: [],
+      save_attendance: [],
+      errors: []
+    };
+  },
+  mounted: function mounted() {
+    this.renderPage();
+  },
+  methods: {
+    renderPage: function renderPage() {
+      var _this = this;
+
+      //get students
+      axios.get('/api/course/' + this.session.course_id + '/students').then(function (response) {
+        _this.students = response.data;
+      })["catch"](function (e) {
+        _this.errors.push(e);
+      }); //get students' attendance
+
+      axios.get('/api/attendance/' + this.session.id + '/edit?date=' + this.classroom.original_date).then(function (response) {
+        _this.save_attendance = response.data;
+      })["catch"](function (e) {
+        _this.errors.push(e);
+      });
+    },
+    updateAttendance: function updateAttendance() {
+      var _this2 = this;
+
+      axios.post('/api/update/attendance', {
+        attendances: this.save_attendance,
+        date: this.classroom.original_date,
+        session_id: this.session.id
+      }).then(function (response) {
+        _this2.$toast.open({
+          message: 'You successfully taken attendance for the date',
+          type: 'success',
+          position: 'top-right'
+        });
+
+        _router__WEBPACK_IMPORTED_MODULE_0__["default"].push({
+          path: '/session/' + _this2.session.id
+        });
+      })["catch"](function (e) {
+        _this2.errors.push(e);
+
+        _this2.$toast.open({
+          message: 'Error occurred during submission',
+          type: 'error',
+          position: 'top-right'
+        });
+      });
     }
   }
 });
@@ -64465,9 +64611,19 @@ var render = function() {
                             [_vm._v("Take Attendance")]
                           )
                         : _c(
-                            "a",
-                            { staticClass: "taken", attrs: { href: "#" } },
-                            [_vm._v("Already Taken")]
+                            "router-link",
+                            {
+                              attrs: {
+                                to: {
+                                  name: "editAttendance",
+                                  params: {
+                                    classroom: item,
+                                    session: _vm.session
+                                  }
+                                }
+                              }
+                            },
+                            [_vm._v("Edit Attendance")]
                           )
                     ],
                     1
@@ -66282,6 +66438,8 @@ var render = function() {
                         _vm._v(" "),
                         _c("td", [_vm._v(_vm._s(course.time))]),
                         _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(course.day))]),
+                        _vm._v(" "),
                         _c("td", [
                           _vm.user.courses.some(function(c) {
                             return c.id === course.id
@@ -66370,9 +66528,11 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Capacity")]),
         _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Date")]),
+        _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Time")]),
         _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Date")])
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Days")])
       ])
     ])
   }
@@ -66507,6 +66667,297 @@ var staticRenderFns = [
             [_vm._v("Dashboard")]
           )
         ])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/EditAttendance.vue?vue&type=template&id=7b3adb84&scoped=true&":
+/*!*****************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/EditAttendance.vue?vue&type=template&id=7b3adb84&scoped=true& ***!
+  \*****************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "page-content" }, [
+    _c("div", { staticClass: "page-info" }, [
+      _c("nav", { attrs: { "aria-label": "breadcrumb" } }, [
+        _c("ol", { staticClass: "breadcrumb" }, [
+          _c(
+            "li",
+            { staticClass: "breadcrumb-item" },
+            [_c("router-link", { attrs: { to: "/" } }, [_vm._v("Dashboard")])],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "li",
+            { staticClass: "breadcrumb-item" },
+            [
+              _c(
+                "router-link",
+                { attrs: { to: "/course/" + this.session.course_id } },
+                [_vm._v(_vm._s(_vm.session.course.title))]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "li",
+            { staticClass: "breadcrumb-item" },
+            [
+              _c(
+                "router-link",
+                { attrs: { to: "/sessions/" + this.session.course_id } },
+                [_vm._v("Session")]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "li",
+            { staticClass: "breadcrumb-item" },
+            [
+              _c(
+                "router-link",
+                { attrs: { to: "/session/" + this.session.id } },
+                [_vm._v(_vm._s(this.session.description))]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _vm.session
+            ? _c(
+                "li",
+                {
+                  staticClass: "breadcrumb-item active",
+                  attrs: { "aria-current": "page" }
+                },
+                [_vm._v(_vm._s(this.classroom.date))]
+              )
+            : _vm._e()
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row container" }, [
+      _c("div", { staticClass: "col-12" }, [
+        _c(
+          "table",
+          { staticClass: "display table", attrs: { id: "table_id" } },
+          [
+            _vm._m(0),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              _vm._l(this.save_attendance, function(student, key) {
+                return _c("tr", [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.save_attendance[key]["student_id"],
+                        expression: "save_attendance[key]['student_id']"
+                      }
+                    ],
+                    attrs: { type: "hidden" },
+                    domProps: { value: _vm.save_attendance[key]["student_id"] },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.save_attendance[key],
+                          "student_id",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("th", { attrs: { scope: "row" } }, [
+                    _vm._v(_vm._s(student.name))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.save_attendance[key]["attendance_type_id"],
+                          expression:
+                            "save_attendance[key]['attendance_type_id']"
+                        }
+                      ],
+                      attrs: { type: "radio", id: "present".key, value: "1" },
+                      domProps: {
+                        checked: _vm._q(
+                          _vm.save_attendance[key]["attendance_type_id"],
+                          "1"
+                        )
+                      },
+                      on: {
+                        change: function($event) {
+                          return _vm.$set(
+                            _vm.save_attendance[key],
+                            "attendance_type_id",
+                            "1"
+                          )
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("label", { attrs: { for: "present".key } }, [
+                      _vm._v("Present")
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.save_attendance[key]["attendance_type_id"],
+                          expression:
+                            "save_attendance[key]['attendance_type_id']"
+                        }
+                      ],
+                      attrs: { type: "radio", id: "late".key, value: "2" },
+                      domProps: {
+                        checked: _vm._q(
+                          _vm.save_attendance[key]["attendance_type_id"],
+                          "2"
+                        )
+                      },
+                      on: {
+                        change: function($event) {
+                          return _vm.$set(
+                            _vm.save_attendance[key],
+                            "attendance_type_id",
+                            "2"
+                          )
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("label", { attrs: { for: "late".key } }, [
+                      _vm._v("Late")
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.save_attendance[key]["attendance_type_id"],
+                          expression:
+                            "save_attendance[key]['attendance_type_id']"
+                        }
+                      ],
+                      attrs: { type: "radio", id: "absent".key, value: "3" },
+                      domProps: {
+                        checked: _vm._q(
+                          _vm.save_attendance[key]["attendance_type_id"],
+                          "3"
+                        )
+                      },
+                      on: {
+                        change: function($event) {
+                          return _vm.$set(
+                            _vm.save_attendance[key],
+                            "attendance_type_id",
+                            "3"
+                          )
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("label", { attrs: { for: "absent".key } }, [
+                      _vm._v("Absent")
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.save_attendance[key]["feedback"],
+                          expression: "save_attendance[key]['feedback']"
+                        }
+                      ],
+                      attrs: { type: "text" },
+                      domProps: { value: _vm.save_attendance[key]["feedback"] },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.save_attendance[key],
+                            "feedback",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ])
+                ])
+              }),
+              0
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "blocks" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-primary my-4",
+              on: {
+                click: function($event) {
+                  return _vm.updateAttendance()
+                }
+              }
+            },
+            [_vm._v("Update Attendance")]
+          )
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Student Name")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Attendance Type")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Comment")])
       ])
     ])
   }
@@ -85371,6 +85822,75 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/EditAttendance.vue":
+/*!****************************************************!*\
+  !*** ./resources/js/components/EditAttendance.vue ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _EditAttendance_vue_vue_type_template_id_7b3adb84_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EditAttendance.vue?vue&type=template&id=7b3adb84&scoped=true& */ "./resources/js/components/EditAttendance.vue?vue&type=template&id=7b3adb84&scoped=true&");
+/* harmony import */ var _EditAttendance_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EditAttendance.vue?vue&type=script&lang=js& */ "./resources/js/components/EditAttendance.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _EditAttendance_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _EditAttendance_vue_vue_type_template_id_7b3adb84_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _EditAttendance_vue_vue_type_template_id_7b3adb84_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "7b3adb84",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/EditAttendance.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/EditAttendance.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************!*\
+  !*** ./resources/js/components/EditAttendance.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EditAttendance_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./EditAttendance.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/EditAttendance.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EditAttendance_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/EditAttendance.vue?vue&type=template&id=7b3adb84&scoped=true&":
+/*!***********************************************************************************************!*\
+  !*** ./resources/js/components/EditAttendance.vue?vue&type=template&id=7b3adb84&scoped=true& ***!
+  \***********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditAttendance_vue_vue_type_template_id_7b3adb84_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./EditAttendance.vue?vue&type=template&id=7b3adb84&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/EditAttendance.vue?vue&type=template&id=7b3adb84&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditAttendance_vue_vue_type_template_id_7b3adb84_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditAttendance_vue_vue_type_template_id_7b3adb84_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/GradeAssignment.vue":
 /*!*****************************************************!*\
   !*** ./resources/js/components/GradeAssignment.vue ***!
@@ -85827,7 +86347,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Classes__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/Classes */ "./resources/js/components/Classes.vue");
 /* harmony import */ var _components_Sessions__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/Sessions */ "./resources/js/components/Sessions.vue");
 /* harmony import */ var _components_Attendance__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/Attendance */ "./resources/js/components/Attendance.vue");
-/* harmony import */ var _components_Calendar__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/Calendar */ "./resources/js/components/Calendar.vue");
+/* harmony import */ var _components_EditAttendance__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/EditAttendance */ "./resources/js/components/EditAttendance.vue");
+/* harmony import */ var _components_Calendar__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/Calendar */ "./resources/js/components/Calendar.vue");
+
 
 
 
@@ -85876,6 +86398,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
     path: '/sessions/:course_id',
     component: _components_Sessions__WEBPACK_IMPORTED_MODULE_12__["default"]
   }, {
+    name: 'classList',
     path: '/session/:sessionId',
     component: _components_Classes__WEBPACK_IMPORTED_MODULE_11__["default"]
   }, {
@@ -85884,9 +86407,14 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
     component: _components_Attendance__WEBPACK_IMPORTED_MODULE_13__["default"],
     props: true
   }, {
+    path: '/attendance/edit',
+    name: 'editAttendance',
+    component: _components_EditAttendance__WEBPACK_IMPORTED_MODULE_14__["default"],
+    props: true
+  }, {
     path: '/calendar',
     name: 'calendar',
-    component: _components_Calendar__WEBPACK_IMPORTED_MODULE_14__["default"]
+    component: _components_Calendar__WEBPACK_IMPORTED_MODULE_15__["default"]
   }],
   mode: 'history',
   linkActiveClass: "",

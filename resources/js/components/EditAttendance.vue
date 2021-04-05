@@ -15,7 +15,7 @@
                     <li class="breadcrumb-item">
                         <router-link :to="'/session/'+this.session.id">{{ this.session.description }}</router-link>
                     </li>
-                    <li class="breadcrumb-item active" aria-current="page" v-if="session">{{ this.class.date }}</li>
+                    <li class="breadcrumb-item active" aria-current="page" v-if="session">{{ this.classroom.date }}</li>
                 </ol>
             </nav>
         </div>
@@ -30,9 +30,8 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(student,key) in students">
-                        <!--                        <input type="hidden" v-model="add_attendance.student_id[key] = student.id">-->
-                        <input type="hidden" v-model="save_attendance[key]['student_id'] = student.id">
+                    <tr v-for="(student,key) in this.save_attendance">
+                        <input type="hidden" v-model="save_attendance[key]['student_id']">
                         <th scope="row">{{ student.name }}</th>
                         <td>
                             <!--                            <input type="radio" :id="'present'.key" v-model="add_attendance.attendance_type_id[key]" value="1">-->
@@ -47,13 +46,13 @@
                         </td>
                         <td>
                             <!--                            <input type="text" v-model="add_attendance.description[key]" value="">-->
-                            <input type="text" v-model="save_attendance[key]['feedback']" value="">
+                            <input type="text" v-model="save_attendance[key]['feedback']">
                         </td>
                     </tr>
                     </tbody>
                 </table>
                 <div class="blocks">
-                    <button class="btn btn-primary my-4" @click="saveAttendance()">Save Attendance</button>
+                    <button class="btn btn-primary my-4" @click="updateAttendance()">Update Attendance</button>
                 </div>
             </div>
         </div>
@@ -61,18 +60,23 @@
 </template>
 
 <script>
+import router from "../router";
+
 export default {
     name: "Attendance",
-    props: ['class','session'],
+    props: ['classroom','session'],
     data() {
         return {
             students: [],
+            attendances: [],
             add_attendance: {
                 student_id: [],
                 attendance_type_id: [],
                 description: []
             },
-            save_attendance: []
+            edit_attendance:[],
+            save_attendance: [],
+            errors:[]
         }
     },
     mounted() {
@@ -84,30 +88,30 @@ export default {
             axios.get('/api/course/'+this.session.course_id+'/students')
                 .then(response => {
                     this.students = response.data;
-                    for(let i=0;i<this.students.length;i++)
-                        this.save_attendance.push({
-                            student_id: null,
-                            feedback: '',
-                            attendance_type_id: null,
-                            session_id: this.session.id,
-                            original_date: this.class.original_date,
-                        });
+                }).catch(e => {
+                this.errors.push(e)
+            });
+            //get students' attendance
+            axios.get('/api/attendance/'+this.session.id+'/edit?date='+this.classroom.original_date)
+                .then(response => {
+                    this.save_attendance = response.data;
                 }).catch(e => {
                 this.errors.push(e)
             });
         },
-        saveAttendance(){
-            let formData = new FormData();
-            formData.append('attendance',this.save_attendance)
-            axios.post('/api/attendance', this.save_attendance)
-                .then(response => {
-                    this.$toast.open({
-                        message: 'You successfully taken attendance for the date',
-                        type: 'success',
-                        position: 'top-right'
-                    });
-                    router.push({path:'/session/'+this.session.id});
-                }).catch(e => {
+        updateAttendance(){
+            axios.post('/api/update/attendance', {
+                attendances : this.save_attendance,
+                date : this.classroom.original_date,
+                session_id : this.session.id
+            }).then(response => {
+                this.$toast.open({
+                    message: 'You successfully updated the attendance!',
+                    type: 'success',
+                    position: 'top-right'
+                });
+                router.push({path:'/session/'+this.session.id});
+            }).catch(e => {
                 this.errors.push(e);
                 this.$toast.open({
                     message: 'Error occurred during submission',

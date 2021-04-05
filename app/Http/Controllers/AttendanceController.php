@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Attendance;
+use App\Session;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -72,12 +73,22 @@ class AttendanceController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @param Request $request
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      */
-    public function edit($id)
+    public function edit($id,Request $request)
     {
-        //
+        $attendances = Attendance::with('student')->where('session_id',$id)
+            ->where('original_date',$request->date)->get();
+        $array = [];
+        foreach ($attendances as $key => $attendance){
+            $array[$key]['name'] = $attendance->student->name;
+            $array[$key]['student_id'] = $attendance->student->id;
+            $array[$key]['attendance_type_id'] = $attendance->attendance_type_id;
+            $array[$key]['feedback'] = $attendance->feedback;
+        }
+        return $array;
     }
 
     /**
@@ -89,7 +100,18 @@ class AttendanceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return $request->toArray();
+    }
+
+    public function customUpdate(Request $request){
+        $date = Carbon::parse($request->date)->format('Y-m-d H:i:s');
+        $generalAttendanceQuery = Attendance::where('session_id',$request->session_id)->where('original_date',$date);
+        foreach ($request->attendances as $attendance)
+            $generalAttendanceQuery->where('student_id',$attendance['student_id'])->update([
+                'attendance_type_id' => $attendance['attendance_type_id'],
+                'feedback' => $attendance['feedback']
+            ]);
+        return response('The attendance has been successfully updated.',200);
     }
 
     /**

@@ -35,7 +35,8 @@
                         <td>
                             <router-link :to="{ name:'attendance', params:{class:item,session:session} }"
                             v-if="!item.taken">Take Attendance</router-link>
-                            <a href="#" class="taken" v-else>Already Taken</a>
+                            <router-link :to="{ name:'editAttendance', params:{classroom:item,session:session} }"
+                                         v-else>Edit Attendance</router-link>
 <!--                            <a href="#" data-toggle="modal" data-target="#AddModal">Take Attendance Now</a>-->
                         </td>
                     </tr>

@@ -309,6 +309,7 @@ Route::get('course/{course}/students','CourseController@getStudents');
 Route::post('course/instructor','CourseController@addInstructorToStudents');
 
 Route::resource('attendance',AttendanceController::class);
+Route:: post('/update/attendance','AttendanceController@customUpdate');
 
 Route::get('calendar/{student}','CalendarController@getSchedule');
 Route::get('instructors',function(){

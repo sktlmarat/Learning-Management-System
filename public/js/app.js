@@ -20603,6 +20603,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
   data: function data() {
@@ -20673,21 +20675,43 @@ __webpack_require__.r(__webpack_exports__);
     },
     checkOverlap: function checkOverlap(course) {
       var time = course.time.toString().split('-');
+      var dateB = course.date.toString().split(' to ');
+      var daysA = course.day.toString().split(',');
       var lineA = {
         start: time[0],
         end: time[1]
       };
-      var overlap = false;
+      var overlapTime = false;
+      var overlapDate = false;
+      var overlapDay = false;
       this.courses.forEach(function (item) {
-        if (item.id === course.id || item.time == null) return;
+        if (item.id === course.id || item.time == null) return; //check time overlap below
+
         var time = item.time.toString().split('-');
         var lineB = {
           start: time[0],
           end: time[1]
         };
-        if (lineA.start >= lineB.start && lineA.start <= lineB.end || lineA.end >= lineB.start && lineA.end <= lineB.end || lineB.start >= lineA.start && lineB.start <= lineA.end || lineB.end >= lineA.start && lineB.end <= lineA.end) overlap = true;
+        if (lineA.start >= lineB.start && lineA.start <= lineB.end || lineA.end >= lineB.start && lineA.end <= lineB.end || lineB.start >= lineA.start && lineB.start <= lineA.end || lineB.end >= lineA.start && lineB.end <= lineA.end) overlapTime = true; //check date overlap below
+
+        var dateA = item.date.toString().split(' to ');
+        var a_start = dateA[0];
+        var a_end = dateA[1];
+        var b_start = dateB[0];
+        var b_end = dateB[1];
+        if (a_start <= b_start && b_start <= a_end) overlapDate = true; // b starts in a
+
+        if (a_start <= b_end && b_end <= a_end) overlapDate = true; // b ends in a
+
+        if (b_start < a_start && a_end < b_end) overlapDate = true; // a in b
+        //check day overlap below
+
+        var daysB = item.day.toString().split(',');
+        overlapDay = daysA.some(function (r) {
+          return daysB.indexOf(r) >= 0;
+        });
       });
-      return overlap;
+      return overlapTime && overlapDate && overlapDay;
     }
   },
   computed: {
@@ -66016,6 +66040,8 @@ var render = function() {
                         _vm._v(" "),
                         _c("td", [_vm._v(_vm._s(course.capacity))]),
                         _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(course.date))]),
+                        _vm._v(" "),
                         _c("td", [_vm._v(_vm._s(course.time))]),
                         _vm._v(" "),
                         _c("td", [
@@ -66106,7 +66132,9 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Capacity")]),
         _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Time")])
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Time")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Date")])
       ])
     ])
   }

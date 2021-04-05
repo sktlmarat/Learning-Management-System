@@ -43,6 +43,9 @@ Route::get('/all-courses', function () {
         if(isset($course->session[0]))
             $course->time = Carbon::parse($course->session[0]->date)->format('H:i')
                 .'-'.Carbon::parse($course->session[0]->date)->addMinutes($course->session[0]->duration)->format('H:i');
+            $course->date = Carbon::parse($course->session[0]->date)->format('Y-m-d')
+                .' to '.Carbon::parse($course->session[0]->end_date)->format('Y-m-d');
+            $course->day = $course->session[0]->session_days;
     });
     return $courses;
 });

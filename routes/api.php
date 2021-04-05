@@ -209,7 +209,7 @@ Route::post('/add-assignment', function (Request $request) {
 Route::post('/add-material', function (Request $request) {
     $material = new Material();
     $file = $request->file('file');
-    $fileName = uniqid() . '.' . $file->extension();
+    $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
     $file->storePubliclyAs('public', $fileName);
     $material->title = $request->title;
     $material->file = $fileName;

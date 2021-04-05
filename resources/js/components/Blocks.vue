@@ -145,7 +145,7 @@
                         </router-link>
                     </li>
                     <li v-for="material in block.materials">
-                        <i class="material-icons">school</i> <a :href="'/storage/' + material.file"> {{ material.title }}</a>
+                        <i class="material-icons">school</i> <a :href="'/storage/' + material.file" target="_blank"> {{ material.title }}</a>
                     </li>
                 </ul>
                 <button v-if="user.role == 'instructor'" @click="editHelper(block.id, block.title, i)"
@@ -298,7 +298,7 @@ export default {
             for (const [key, value] of Object.entries(this.add_assignment)) {
                 formData.append(key, value);
             }
-            axios.post('/api/add-assignment/', formData,
+            axios.post('/api/add-assignment', formData,
                 {
                     headers: {
                         'Content-Type': 'multipart/form-data'
@@ -328,7 +328,7 @@ export default {
             for (const [key, value] of Object.entries(this.add_material)) {
                 formData.append(key, value);
             }
-            axios.post('/api/add-material/', formData,
+            axios.post('/api/add-material', formData,
                 {
                     headers: {
                         'Content-Type': 'multipart/form-data'

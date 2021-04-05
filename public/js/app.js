@@ -19689,7 +19689,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         formData.append(key, value);
       }
 
-      axios.post('/api/add-assignment/', formData, {
+      axios.post('/api/add-assignment', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -19727,7 +19727,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         formData.append(key, value);
       }
 
-      axios.post('/api/add-material/', formData, {
+      axios.post('/api/add-material', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -64004,9 +64004,16 @@ var render = function() {
                       _vm._v("school")
                     ]),
                     _vm._v(" "),
-                    _c("a", { attrs: { href: "/storage/" + material.file } }, [
-                      _vm._v(" " + _vm._s(material.title))
-                    ])
+                    _c(
+                      "a",
+                      {
+                        attrs: {
+                          href: "/storage/" + material.file,
+                          target: "_blank"
+                        }
+                      },
+                      [_vm._v(" " + _vm._s(material.title))]
+                    )
                   ])
                 })
               ],

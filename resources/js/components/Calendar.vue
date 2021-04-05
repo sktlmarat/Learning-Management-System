@@ -22,6 +22,7 @@
 import FullCalendar from '@fullcalendar/vue'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
+import timeGridPlugin from '@fullcalendar/timegrid'
 export default {
     props: ['user'],
     name: "Calendar",
@@ -32,9 +33,11 @@ export default {
         return {
             errors: [],
             calendarOptions: {
-                plugins: [ dayGridPlugin, interactionPlugin ],
-                initialView: 'dayGridMonth',
-                events: []
+                plugins: [ dayGridPlugin, interactionPlugin, timeGridPlugin ],
+                initialView: 'timeGridWeek',
+                events: [],
+                Duration: "02:00:00",
+                hiddenDays: [0]
             }
         }
     },

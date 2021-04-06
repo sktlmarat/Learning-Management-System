@@ -21008,7 +21008,7 @@ __webpack_require__.r(__webpack_exports__);
         session_id: this.session.id
       }).then(function (response) {
         _this2.$toast.open({
-          message: 'You successfully taken attendance for the date',
+          message: 'You successfully updated the attendance!',
           type: 'success',
           position: 'top-right'
         });
@@ -86441,8 +86441,8 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /var/www/upwork/Learning-Management-System/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /var/www/upwork/Learning-Management-System/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /Users/marat/Documents/Learning-Management-System/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /Users/marat/Documents/Learning-Management-System/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

@@ -120,12 +120,23 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group col-12">
+                            <label>Choose type</label>
+                            <select v-model="add_material.type" class="form-control">
+                                <option value="file">File</option>
+                                <option value="link">Link</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-12">
                             <label>Title</label>
                             <input v-model="add_material.title" type="text" class="form-control">
                         </div>
-                        <div class="form-group col-12">
+                        <div class="form-group col-12" v-if="add_material.type == 'file'">
                             <label>Attach a file</label>
                             <input ref="material" type="file" class="form-control" @change="handleFileMaterial">
+                        </div>
+                        <div class="form-group col-12" v-if="add_material.type == 'link'">
+                            <label>Add a link</label>
+                            <input type="text" class="form-control" v-model="add_material.link">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -140,12 +151,15 @@
             <div class="card-body">
                 <h3>{{ block.title }}</h3>
                 <ul>
-                    <li v-for="assignment in block.assignments">
-                        <i class="material-icons">download_done</i><router-link :to="'/course/' + course + '/assignment/' + assignment.id"> {{ assignment.title }}
+                    <li class="list-assignments mb-1" v-for="assignment in block.assignments">
+                        <i class="material-icons list-icons">download_done</i><router-link :to="'/course/' + course + '/assignment/' + assignment.id"> {{ assignment.title }}
                         </router-link>
                     </li>
-                    <li v-for="material in block.materials">
-                        <i class="material-icons">school</i> <a :href="'/storage/' + material.file" target="_blank"> {{ material.title }}</a>
+                    <li class="list-assignments mb-1" v-for="material in block.materials" v-if="material.type == 'file'">
+                        <i class="material-icons list-icons">school</i> <a :href="'/storage/' + material.file" target="_blank"> {{ material.title }}</a>
+                    </li>
+                    <li class="list-assignments mb-1" v-for="material in block.materials" v-if="material.type == 'link'">
+                        <i class="material-icons list-icons">language</i> <a :href="material.link" target="_blank"> {{ material.title }}</a>
                     </li>
                 </ul>
                 <button v-if="user.role == 'instructor'" @click="editHelper(block.id, block.title, i)"
@@ -196,7 +210,9 @@ export default {
             add_material: {
                 title: '',
                 file: '',
-                block_id: ''
+                block_id: '',
+                type: '',
+                link: ''
             }
         }
     },
@@ -323,34 +339,57 @@ export default {
                 });
         },
         addMaterial() {
-            let formData = new FormData();
-            formData.append('file', this.add_material.file);
-            for (const [key, value] of Object.entries(this.add_material)) {
-                formData.append(key, value);
+            if(this.add_material.type == 'file'){
+                let formData = new FormData();
+                formData.append('file', this.add_material.file);
+                for (const [key, value] of Object.entries(this.add_material)) {
+                    formData.append(key, value);
+                }
+                axios.post('/api/add-material', formData,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    })
+                    .then(response => {
+                        $("#material_close").click();
+                        this.$toast.open({
+                            message: 'You successfully added new material!',
+                            type: 'success',
+                            position: 'top-right'
+                        });
+                        this.renderPage();
+                    })
+                    .catch(e => {
+                        this.errors.push(e);
+                        this.$toast.open({
+                            message: 'Error occurred during submission',
+                            type: 'error',
+                            position: 'top-right'
+                        });
+                    });
             }
-            axios.post('/api/add-material', formData,
-                {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                })
-                .then(response => {
-                    $("#material_close").click();
-                    this.$toast.open({
-                        message: 'You successfully added new material!',
-                        type: 'success',
-                        position: 'top-right'
+            if(this.add_material.type == 'link'){
+                axios.post('/api/add-material', {title: this.add_material.title, link: this.add_material.link, type: this.add_material.type, block_id: this.add_material.block_id})
+                    .then(response => {
+                        $("#material_close").click();
+                        this.$toast.open({
+                            message: 'You successfully added new material!',
+                            type: 'success',
+                            position: 'top-right'
+                        });
+                        this.renderPage();
+                    })
+                    .catch(e => {
+                        this.errors.push(e);
+                        this.$toast.open({
+                            message: 'Error occurred during submission',
+                            type: 'error',
+                            position: 'top-right'
+                        });
                     });
-                    this.renderPage();
-                })
-                .catch(e => {
-                    this.errors.push(e);
-                    this.$toast.open({
-                        message: 'Error occurred during submission',
-                        type: 'error',
-                        position: 'top-right'
-                    });
-                });
+            }
+
         },
     }
 }
@@ -360,6 +399,17 @@ export default {
 ul{
     padding-left: 10px;
     list-style: none;
+}
+.list-assignments, .list-icons{
+    vertical-align: middle !important;
+}
+.list-assignments a{
+    font-size: 16px !important;
+    vertical-align: middle;
+}
+.list-icons{
+    font-size: 26px;
+    margin-right: 5px;
 }
 </style>
 

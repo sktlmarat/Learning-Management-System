@@ -16,9 +16,11 @@ class CreateMaterialsTable extends Migration
         Schema::create('materials', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->text('file');
+            $table->text('file')->nullable();
             $table->bigInteger('block_id')->unsigned();
             $table->foreign('block_id')->references('id')->on('blocks')->onDelete('cascade');
+            $table->enum('type', ['file', 'link']);
+            $table->text('link')->nullable();
             $table->timestamps();
         });
     }

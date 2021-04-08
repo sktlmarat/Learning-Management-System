@@ -208,13 +208,23 @@ Route::post('/add-assignment', function (Request $request) {
 
 Route::post('/add-material', function (Request $request) {
     $material = new Material();
-    $file = $request->file('file');
-    $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
-    $file->storePubliclyAs('public', $fileName);
-    $material->title = $request->title;
-    $material->file = $fileName;
-    $material->block_id = $request->block_id;
-    $material->save();
+    if($request->type == 'file') {
+        $file = $request->file('file');
+        $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
+        $file->storePubliclyAs('public', $fileName);
+        $material->title = $request->title;
+        $material->file = $fileName;
+        $material->block_id = $request->block_id;
+        $material->type = 'file';
+        $material->save();
+    }
+    if($request->type == 'link') {
+        $material->title = $request->title;
+        $material->link = $request->link;
+        $material->block_id = $request->block_id;
+        $material->type = 'link';
+        $material->save();
+    }
     return $material;
 });
 

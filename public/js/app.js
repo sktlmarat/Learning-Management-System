@@ -19541,6 +19541,20 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user', 'course'],
   data: function data() {
@@ -19567,7 +19581,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       add_material: {
         title: '',
         file: '',
-        block_id: ''
+        block_id: '',
+        type: '',
+        link: ''
       }
     };
   },
@@ -19718,40 +19734,69 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     addMaterial: function addMaterial() {
       var _this6 = this;
 
-      var formData = new FormData();
-      formData.append('file', this.add_material.file);
+      if (this.add_material.type == 'file') {
+        var formData = new FormData();
+        formData.append('file', this.add_material.file);
 
-      for (var _i2 = 0, _Object$entries2 = Object.entries(this.add_material); _i2 < _Object$entries2.length; _i2++) {
-        var _Object$entries2$_i = _slicedToArray(_Object$entries2[_i2], 2),
-            key = _Object$entries2$_i[0],
-            value = _Object$entries2$_i[1];
+        for (var _i2 = 0, _Object$entries2 = Object.entries(this.add_material); _i2 < _Object$entries2.length; _i2++) {
+          var _Object$entries2$_i = _slicedToArray(_Object$entries2[_i2], 2),
+              key = _Object$entries2$_i[0],
+              value = _Object$entries2$_i[1];
 
-        formData.append(key, value);
+          formData.append(key, value);
+        }
+
+        axios.post('/api/add-material', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }).then(function (response) {
+          $("#material_close").click();
+
+          _this6.$toast.open({
+            message: 'You successfully added new material!',
+            type: 'success',
+            position: 'top-right'
+          });
+
+          _this6.renderPage();
+        })["catch"](function (e) {
+          _this6.errors.push(e);
+
+          _this6.$toast.open({
+            message: 'Error occurred during submission',
+            type: 'error',
+            position: 'top-right'
+          });
+        });
       }
 
-      axios.post('/api/add-material', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then(function (response) {
-        $("#material_close").click();
+      if (this.add_material.type == 'link') {
+        axios.post('/api/add-material', {
+          title: this.add_material.title,
+          link: this.add_material.link,
+          type: this.add_material.type,
+          block_id: this.add_material.block_id
+        }).then(function (response) {
+          $("#material_close").click();
 
-        _this6.$toast.open({
-          message: 'You successfully added new material!',
-          type: 'success',
-          position: 'top-right'
+          _this6.$toast.open({
+            message: 'You successfully added new material!',
+            type: 'success',
+            position: 'top-right'
+          });
+
+          _this6.renderPage();
+        })["catch"](function (e) {
+          _this6.errors.push(e);
+
+          _this6.$toast.open({
+            message: 'Error occurred during submission',
+            type: 'error',
+            position: 'top-right'
+          });
         });
-
-        _this6.renderPage();
-      })["catch"](function (e) {
-        _this6.errors.push(e);
-
-        _this6.$toast.open({
-          message: 'Error occurred during submission',
-          type: 'error',
-          position: 'top-right'
-        });
-      });
+      }
     }
   }
 });
@@ -22434,7 +22479,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\nul[data-v-6f8b6e9e]{\n    padding-left: 10px;\n    list-style: none;\n}\n", ""]);
+exports.push([module.i, "\nul[data-v-6f8b6e9e]{\n    padding-left: 10px;\n    list-style: none;\n}\n.list-assignments[data-v-6f8b6e9e], .list-icons[data-v-6f8b6e9e]{\n    vertical-align: middle !important;\n}\n.list-assignments a[data-v-6f8b6e9e]{\n    font-size: 16px !important;\n    vertical-align: middle;\n}\n.list-icons[data-v-6f8b6e9e]{\n    font-size: 26px;\n    margin-right: 5px;\n}\n", ""]);
 
 // exports
 
@@ -64116,6 +64161,53 @@ var render = function() {
                     _vm._v(" "),
                     _c("div", { staticClass: "modal-body" }, [
                       _c("div", { staticClass: "form-group col-12" }, [
+                        _c("label", [_vm._v("Choose type")]),
+                        _vm._v(" "),
+                        _c(
+                          "select",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.add_material.type,
+                                expression: "add_material.type"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            on: {
+                              change: function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.add_material,
+                                  "type",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              }
+                            }
+                          },
+                          [
+                            _c("option", { attrs: { value: "file" } }, [
+                              _vm._v("File")
+                            ]),
+                            _vm._v(" "),
+                            _c("option", { attrs: { value: "link" } }, [
+                              _vm._v("Link")
+                            ])
+                          ]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "form-group col-12" }, [
                         _c("label", [_vm._v("Title")]),
                         _vm._v(" "),
                         _c("input", {
@@ -64145,16 +64237,50 @@ var render = function() {
                         })
                       ]),
                       _vm._v(" "),
-                      _c("div", { staticClass: "form-group col-12" }, [
-                        _c("label", [_vm._v("Attach a file")]),
-                        _vm._v(" "),
-                        _c("input", {
-                          ref: "material",
-                          staticClass: "form-control",
-                          attrs: { type: "file" },
-                          on: { change: _vm.handleFileMaterial }
-                        })
-                      ])
+                      _vm.add_material.type == "file"
+                        ? _c("div", { staticClass: "form-group col-12" }, [
+                            _c("label", [_vm._v("Attach a file")]),
+                            _vm._v(" "),
+                            _c("input", {
+                              ref: "material",
+                              staticClass: "form-control",
+                              attrs: { type: "file" },
+                              on: { change: _vm.handleFileMaterial }
+                            })
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.add_material.type == "link"
+                        ? _c("div", { staticClass: "form-group col-12" }, [
+                            _c("label", [_vm._v("Add a link")]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.add_material.link,
+                                  expression: "add_material.link"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: { type: "text" },
+                              domProps: { value: _vm.add_material.link },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.add_material,
+                                    "link",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            })
+                          ])
+                        : _vm._e()
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "modal-footer" }, [
@@ -64199,8 +64325,9 @@ var render = function() {
                 _vm._l(block.assignments, function(assignment) {
                   return _c(
                     "li",
+                    { staticClass: "list-assignments mb-1" },
                     [
-                      _c("i", { staticClass: "material-icons" }, [
+                      _c("i", { staticClass: "material-icons list-icons" }, [
                         _vm._v("download_done")
                       ]),
                       _c(
@@ -64228,22 +64355,40 @@ var render = function() {
                 }),
                 _vm._v(" "),
                 _vm._l(block.materials, function(material) {
-                  return _c("li", [
-                    _c("i", { staticClass: "material-icons" }, [
-                      _vm._v("school")
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "a",
-                      {
-                        attrs: {
-                          href: "/storage/" + material.file,
-                          target: "_blank"
-                        }
-                      },
-                      [_vm._v(" " + _vm._s(material.title))]
-                    )
-                  ])
+                  return material.type == "file"
+                    ? _c("li", { staticClass: "list-assignments mb-1" }, [
+                        _c("i", { staticClass: "material-icons list-icons" }, [
+                          _vm._v("school")
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "a",
+                          {
+                            attrs: {
+                              href: "/storage/" + material.file,
+                              target: "_blank"
+                            }
+                          },
+                          [_vm._v(" " + _vm._s(material.title))]
+                        )
+                      ])
+                    : _vm._e()
+                }),
+                _vm._v(" "),
+                _vm._l(block.materials, function(material) {
+                  return material.type == "link"
+                    ? _c("li", { staticClass: "list-assignments mb-1" }, [
+                        _c("i", { staticClass: "material-icons list-icons" }, [
+                          _vm._v("language")
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "a",
+                          { attrs: { href: material.link, target: "_blank" } },
+                          [_vm._v(" " + _vm._s(material.title))]
+                        )
+                      ])
+                    : _vm._e()
                 })
               ],
               2

@@ -8,7 +8,7 @@
 </p>
 
 ##Current Features
-- Authenitcation
+- Authentication
 - Role-based user system (admin, student, instructor)
 - CRUD for all models
 - Manage course resources (lectures, assignments)
@@ -17,15 +17,14 @@
 - Send requests from user side (course approval request)
 - Course thumbnail
 - Submit assignment from student side
-
-##Todo Features
-- Divide students by the year of study
-- Fix max grade
-
-#Completed Features
 - Track attendance (Instructor)
 - Make timeslots
 - Add video files (course materials)
-
 - Course Registration Overlap
 - Course Addition with a session and Instructor
+
+##Todo Features
+- Divide students by the year of study
+- Forget password
+
+

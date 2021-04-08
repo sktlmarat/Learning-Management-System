@@ -199,7 +199,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/public/storage" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Vue" />
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
@@ -207,6 +207,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public/storage" />
       <recent name="$PROJECT_DIR$/public/js" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -286,7 +287,9 @@
       <workItem from="1617694477496" duration="442000" />
       <workItem from="1617696026054" duration="805000" />
       <workItem from="1617902240501" duration="3926000" />
-      <workItem from="1617906503727" duration="49000" />
+      <workItem from="1617906503727" duration="142000" />
+      <workItem from="1617906790577" duration="24000" />
+      <workItem from="1617906819641" duration="717000" />
     </task>
     <servers />
   </component>

@@ -22,9 +22,10 @@
 - Add video files (course materials)
 - Course Registration Overlap
 - Course Addition with a session and Instructor
+- Divide students by the year of study
 
 ##Todo Features
-- Divide students by the year of study
+
 - Forget password
 
 

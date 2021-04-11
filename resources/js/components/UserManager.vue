@@ -47,6 +47,16 @@
                                         <input v-model="new_user.password" type="password" class="form-control">
                                     </div>
                                     <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label>Year of study</label>
+                                            <select v-model="new_user.year_of_study" class="form-control custom-select">
+                                                <option :value="reg.year" v-for="reg in registrations">
+                                                    {{ reg.year }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
                                         <div class="form-group col-md-6">
                                             <label>Department</label>
                                             <select v-model="new_user.department" class="form-control custom-select">
@@ -197,6 +207,7 @@ export default {
     data() {
         return {
             users: null,
+            registrations: null,
             errors: [],
             search: '',
             new_user: {
@@ -207,6 +218,7 @@ export default {
                 role: '',
                 email: '@nu.edu.kz',
                 avatar: '',
+                year_of_study: ''
             },
             edit_user: {
                 id: '',
@@ -237,6 +249,12 @@ export default {
             axios.get('/api/all-departments/')
                 .then(response => {
                     this.departments = response.data;
+                }).catch(e => {
+                this.errors.push(e)
+            });
+            axios.get('/api/all-registrations/')
+                .then(response => {
+                    this.registrations = response.data;
                 }).catch(e => {
                 this.errors.push(e)
             });

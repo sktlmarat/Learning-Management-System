@@ -54,6 +54,10 @@ Route::get('/all-users', function () {
     return User::all();
 });
 
+Route::get('/all-registrations', function () {
+    return \App\Registration::all();
+});
+
 Route::get('/all-departments', function () {
     return Department::all();
 });
@@ -116,6 +120,7 @@ Route::post('/add-user', function (Request $request) {
     $user->role = $request->role;
     $user->avatar = $fileName;
     $user->password = bcrypt($request->password);
+    $user->year_of_study = $request->year_of_study;
     $user->department_id = $request->department;
     $user->save();
     $data = [
@@ -324,4 +329,15 @@ Route:: post('/update/attendance','AttendanceController@customUpdate');
 Route::get('calendar/{student}','CalendarController@getSchedule');
 Route::get('instructors',function(){
     return User::where('role','instructor')->get();
+});
+
+Route::post('/change-registration-status', function (Request $request) {
+    $reg = \App\Registration::find($request->id);
+    $reg->status = $request->status;
+    $reg->save();
+    return \App\Registration::find($request->id);
+});
+
+Route::get('/registration/{year}',function($year){
+    return \App\Registration::where('year',$year)->get();
 });

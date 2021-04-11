@@ -16,6 +16,8 @@
                 </router-link>
                 <router-link v-if="user.role == 'admin'" tag="li" to="/admin/course-manager"><a><i class="material-icons-outlined">class</i>Course Manager</a>
                 </router-link>
+                <router-link v-if="user.role == 'admin'" tag="li" to="/admin/registration-manager"><a><i class="material-icons-outlined">schedule</i>Registration Manager</a>
+                </router-link>
                 <router-link v-if="user.role == 'instructor'" tag="li" to="/my-requests"><a><i class="material-icons-outlined">task</i>My Requests</a>
                 </router-link>
                 <router-link v-if="user.role == 'student'" tag="li" to="/my-grades"><a><i class="material-icons-outlined">grade</i>My Grades</a>

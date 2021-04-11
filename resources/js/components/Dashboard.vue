@@ -24,6 +24,45 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-8" v-if="user.role === 'admin'">
+                <div class="row">
+                    <div class="col-md-6">
+                        <router-link :to=" '/admin/user-manager'">
+                            <div class="card text-center">
+                                <div class="card-header">User Manager</div>
+                                <div class="card-body">
+                                    <h5 class="card-title">Create and Manage users</h5>
+                                    <button class="btn btn-info">Go Inside</button>
+                                </div>
+                            </div>
+                        </router-link>
+                    </div>
+                    <div class="col-md-6">
+                        <router-link :to=" '/admin/course-manager'">
+                            <div class="card text-center">
+                                <div class="card-header">Course Manager</div>
+                                <div class="card-body">
+                                    <h5 class="card-title">Create and Manage courses</h5>
+                                    <button class="btn btn-info">Go Inside</button>
+                                </div>
+                            </div>
+                        </router-link>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <router-link :to=" '/admin/registration-manager'">
+                            <div class="card text-center">
+                                <div class="card-header">Registration Manager</div>
+                                <div class="card-body">
+                                    <h5 class="card-title">Open and close registration</h5>
+                                    <button class="btn btn-info">Go Inside</button>
+                                </div>
+                            </div>
+                        </router-link>
+                    </div>
+                </div>
+            </div>
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">

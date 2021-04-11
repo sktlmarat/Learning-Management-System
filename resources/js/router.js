@@ -9,6 +9,7 @@ import Assignment from "./components/Assignment";
 import MyRequests from "./components/MyRequests";
 import GradeAssignment from "./components/GradeAssignment";
 import MyGrades from "./components/MyGrades";
+import RegistrationManager from "./components/RegistrationManager";
 
 import Classes from "./components/Classes";
 import Sessions from "./components/Sessions";
@@ -83,6 +84,11 @@ export default new VueRouter({
             name: 'calendar',
             component: Calendar
         },
+        {
+            path: '/admin/registration-manager',
+            name: 'registration-manager',
+            component: RegistrationManager
+        }
     ],
     mode: 'history',
     linkActiveClass: "",

@@ -35,6 +35,26 @@ class UserSeeder extends Seeder
             'department_id' => 3
         ]);
 
+        \App\Registration::create([
+           'year' => 'foundation',
+        ]);
+
+        \App\Registration::create([
+            'year' => '1',
+        ]);
+
+        \App\Registration::create([
+            'year' => '2',
+        ]);
+
+        \App\Registration::create([
+            'year' => '3',
+        ]);
+
+        \App\Registration::create([
+            'year' => '4',
+        ]);
+
         $nargiz = \App\User::create([
             'name' => 'Nargiz Zhuanysheva',
             'email' => 'nargiz@gmail.com',
@@ -49,7 +69,8 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'role' => 'student',
             'department_id' => 1,
-            'adviser_id' => 2
+            'adviser_id' => 2,
+            'year_of_study' => '4'
         ]);
 
         $marat->courses()->create([

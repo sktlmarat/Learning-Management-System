@@ -10,14 +10,17 @@
                 </ol>
             </nav>
         </div>
-        <div class="row">
+        <div v-if="registration[0].status === 'closed'" class="alert alert-danger">
+            Registration is closed
+        </div>
+        <div v-else class="row">
             <div class="col-12">
                 <div class="row">
                     <div class="col-xl">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Registration for Spring 2021</h5>
-                                <p>Registration is open for 2nd year students</p>
+                                <p class="text-success">Registration is open</p>
                                 <p>{{ user.name }} - {{ user.department.name}}</p>
                                 <p v-if="user.registration_status === 'pending'">Registration status: <span class="text-warning">Pending</span></p>
                                 <p v-if="user.registration_status === 'approved'">Registration status: <span class="text-success">Approved</span></p>
@@ -51,7 +54,7 @@
                                                 You already enrolled</p>
                                             <p v-else-if="user.schedule_request !== null && user.schedule_request.courses.some(c => c.id === course.id)" class="text-success">
                                                 You already enrolled</p>
-                                            <p v-else-if="checkOverlap(course)" class="text-success">
+                                            <p v-else-if="checkOverlap(course)" class="text-danger">
                                                 Time Overlap</p>
                                             <button v-else @click="register(user.id, course.id, course.title)" class="btn btn-primary">Enroll</button>
                                         </td>
@@ -73,6 +76,7 @@ export default {
     props: ['user'],
     data() {
         return {
+            registration: '',
             courses: null,
             errors: null,
             search: '',
@@ -86,6 +90,14 @@ export default {
             }).catch(e => {
             this.errors.push(e);
         });
+        if(this.user.year_of_study){
+            axios.get('/api/registration/' + this.user.year_of_study)
+                .then(response => {
+                    this.registration = response.data;
+                }).catch(e => {
+                this.errors.push(e);
+            });
+        }
     },
     methods: {
         register(user_id, course_id, course_title) {

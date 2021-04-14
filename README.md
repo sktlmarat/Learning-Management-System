@@ -26,7 +26,6 @@
 
 ##Todo Features
 
-- Forget password
 - Drop course
 
 

@@ -20065,6 +20065,29 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
@@ -20075,6 +20098,10 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       thumbnail: {
         file: '',
         course_id: ''
+      },
+      drop: {
+        uid: this.user.id,
+        cid: ''
       }
     };
   },
@@ -20090,6 +20117,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
       axios.get('/api/course/' + this.$route.params.id).then(function (response) {
         _this.course = response.data;
+        _this.drop.cid = response.data.id;
       })["catch"](function (e) {
         _this.errors.push(e);
       });
@@ -20131,6 +20159,30 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
         _this2.$toast.open({
           message: 'Error occurred during submission',
+          type: 'error',
+          position: 'top-right'
+        });
+      });
+    },
+    dropCourse: function dropCourse() {
+      var _this3 = this;
+
+      axios.post('/api/drop-course', {
+        uid: this.drop.uid,
+        cid: this.drop.cid
+      }).then(function (response) {
+        _this3.renderPage();
+
+        $("#drop_close").click();
+
+        _this3.$toast.open({
+          message: 'Course was successfully dropped',
+          type: 'success',
+          position: 'top-right'
+        });
+      })["catch"](function (e) {
+        _this3.$toast.open({
+          message: 'Can not drop this course',
           type: 'error',
           position: 'top-right'
         });
@@ -20668,6 +20720,15 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -65117,10 +65178,69 @@ var render = function() {
       ]
     ),
     _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "DropModal",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "exampleModalCenterTitle",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "modal-dialog modal-dialog-centered",
+            attrs: { role: "document" }
+          },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _vm._m(2),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: {
+                      id: "drop_close",
+                      type: "button",
+                      "data-dismiss": "modal"
+                    }
+                  },
+                  [_vm._v("Close\n                    ")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-danger",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        return _vm.dropCourse()
+                      }
+                    }
+                  },
+                  [_vm._v("Drop")]
+                )
+              ])
+            ])
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
     _c("div", { staticClass: "row" }, [
       _c(
         "div",
-        { staticClass: "col-8" },
+        { staticClass: "col-md-8" },
         [
           _vm.course
             ? _c("CourseBlock", {
@@ -65131,7 +65251,7 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "col-4" }, [
+      _c("div", { staticClass: "col-md-4" }, [
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-body" }, [
             _vm.course
@@ -65174,6 +65294,20 @@ var render = function() {
                             )
                           ]
                         )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    this.user.role == "student"
+                      ? _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-block btn-danger",
+                            attrs: {
+                              "data-toggle": "modal",
+                              "data-target": "#DropModal"
+                            }
+                          },
+                          [_vm._v("Drop the course")]
+                        )
                       : _vm._e()
                   ])
                 ])
@@ -65204,6 +65338,35 @@ var staticRenderFns = [
         },
         [_c("i", { staticClass: "material-icons" }, [_vm._v("close")])]
       )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title" }, [_vm._v("Drop Confirmation")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("i", { staticClass: "material-icons" }, [_vm._v("close")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-body" }, [
+      _c("p", [_vm._v("You want to drop this course?")])
     ])
   }
 ]
@@ -66450,7 +66613,7 @@ var render = function() {
             ]
           ),
           _vm._v(" "),
-          _c("table", { staticClass: "table" }, [
+          _c("table", { staticClass: "table table-responsive" }, [
             _vm._m(4),
             _vm._v(" "),
             _c(
@@ -66693,168 +66856,174 @@ var render = function() {
       : _c("div", { staticClass: "row" }, [
           _c("div", { staticClass: "col-12" }, [
             _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "col-xl" }, [
-                _c("div", { staticClass: "card" }, [
-                  _c("div", { staticClass: "card-body" }, [
-                    _c("h5", { staticClass: "card-title" }, [
-                      _vm._v("Registration for Spring 2021")
-                    ]),
-                    _vm._v(" "),
-                    _c("p", { staticClass: "text-success" }, [
-                      _vm._v("Registration is open")
-                    ]),
-                    _vm._v(" "),
-                    _c("p", [
-                      _vm._v(
-                        _vm._s(_vm.user.name) +
-                          " - " +
-                          _vm._s(_vm.user.department.name)
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _vm.user.registration_status === "pending"
-                      ? _c("p", [
-                          _vm._v("Registration status: "),
-                          _c("span", { staticClass: "text-warning" }, [
-                            _vm._v("Pending")
-                          ])
+              _c("div", { staticClass: "card" }, [
+                _c("div", { staticClass: "card-body" }, [
+                  _c("h5", { staticClass: "card-title" }, [
+                    _vm._v("Registration for Spring 2021")
+                  ]),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "text-success" }, [
+                    _vm._v("Registration is open")
+                  ]),
+                  _vm._v(" "),
+                  _c("p", [
+                    _vm._v(
+                      _vm._s(_vm.user.name) +
+                        " - " +
+                        _vm._s(_vm.user.department.name)
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _vm.user.registration_status === "pending"
+                    ? _c("p", [
+                        _vm._v("Registration status: "),
+                        _c("span", { staticClass: "text-warning" }, [
+                          _vm._v("Pending")
                         ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.user.registration_status === "approved"
-                      ? _c("p", [
-                          _vm._v("Registration status: "),
-                          _c("span", { staticClass: "text-success" }, [
-                            _vm._v("Approved")
-                          ])
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.user.registration_status === "approved"
+                    ? _c("p", [
+                        _vm._v("Registration status: "),
+                        _c("span", { staticClass: "text-success" }, [
+                          _vm._v("Approved")
                         ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.user.registration_status === "rejected"
-                      ? _c("p", [
-                          _vm._v("Registration status: "),
-                          _c("span", { staticClass: "text-danger" }, [
-                            _vm._v("Rejected")
-                          ])
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.user.registration_status === "rejected"
+                    ? _c("p", [
+                        _vm._v("Registration status: "),
+                        _c("span", { staticClass: "text-danger" }, [
+                          _vm._v("Rejected")
                         ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-md-6 p-0 my-4" }, [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.search,
-                            expression: "search"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: {
-                          id: "exampleInputEmail1",
-                          placeholder: "Search title"
-                        },
-                        domProps: { value: _vm.search },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.search = $event.target.value
-                          }
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-md-6 p-0 my-4" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.search,
+                          expression: "search"
                         }
-                      })
-                    ]),
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        id: "exampleInputEmail1",
+                        placeholder: "Search title"
+                      },
+                      domProps: { value: _vm.search },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.search = $event.target.value
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("table", { staticClass: "table table-responsive" }, [
+                    _vm._m(0),
                     _vm._v(" "),
-                    _c("table", { staticClass: "table" }, [
-                      _vm._m(0),
-                      _vm._v(" "),
-                      _c(
-                        "tbody",
-                        _vm._l(_vm.filteredCourses, function(course) {
-                          return _c("tr", [
-                            _c("th", { attrs: { scope: "row" } }, [
-                              _vm._v(_vm._s(course.title))
-                            ]),
-                            _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(course.abbreviation))]),
-                            _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(course.department.name))]),
-                            _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(course.capacity))]),
-                            _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(course.date))]),
-                            _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(course.time))]),
-                            _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(course.day))]),
-                            _vm._v(" "),
-                            _c("td", [
-                              _vm.user.courses.some(function(c) {
-                                return c.id === course.id
-                              })
-                                ? _c("p", { staticClass: "text-success" }, [
-                                    _vm._v(
-                                      "\n                                            You already enrolled"
-                                    )
-                                  ])
-                                : _vm.user.schedule_request !== null &&
-                                  _vm.user.schedule_request.courses.some(
-                                    function(c) {
-                                      return c.id === course.id
-                                    }
+                    _c(
+                      "tbody",
+                      _vm._l(_vm.filteredCourses, function(course) {
+                        return _c("tr", [
+                          _c("th", { attrs: { scope: "row" } }, [
+                            _vm._v(_vm._s(course.title))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(course.abbreviation))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(course.department.name))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(course.capacity))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(course.date))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(course.time))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(course.day))]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm.user.courses.some(function(c) {
+                              return c.id === course.id
+                            })
+                              ? _c("p", { staticClass: "text-success" }, [
+                                  _vm._v(
+                                    "\n                                            You already enrolled"
                                   )
-                                ? _c("p", { staticClass: "text-success" }, [
-                                    _vm._v(
-                                      "\n                                            You already enrolled"
-                                    )
-                                  ])
-                                : _vm.checkOverlap(course)
-                                ? _c("p", { staticClass: "text-danger" }, [
-                                    _vm._v(
-                                      "\n                                            Time Overlap"
-                                    )
-                                  ])
-                                : _c(
-                                    "button",
-                                    {
-                                      staticClass: "btn btn-primary",
-                                      on: {
-                                        click: function($event) {
-                                          return _vm.register(
-                                            _vm.user.id,
-                                            course.id,
-                                            course.title
-                                          )
-                                        }
+                                ])
+                              : _vm.user.schedule_request !== null &&
+                                _vm.user.schedule_request.courses.some(function(
+                                  c
+                                ) {
+                                  return c.id === course.id
+                                })
+                              ? _c("p", { staticClass: "text-success" }, [
+                                  _vm._v(
+                                    "\n                                            You already enrolled"
+                                  )
+                                ])
+                              : _vm.checkOverlap(course)
+                              ? _c("p", { staticClass: "text-danger" }, [
+                                  _vm._v(
+                                    "\n                                            Time Overlap"
+                                  )
+                                ])
+                              : _c(
+                                  "button",
+                                  {
+                                    staticClass: "btn btn-primary",
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.register(
+                                          _vm.user.id,
+                                          course.id,
+                                          course.title
+                                        )
                                       }
-                                    },
-                                    [_vm._v("Enroll")]
-                                  )
-                            ])
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "Enroll\n                                        "
+                                    )
+                                  ]
+                                )
                           ])
-                        }),
-                        0
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _vm.user.schedule_request !== null &&
-                    (_vm.user.registration_status === null ||
-                      _vm.user.registration_status === "rejected")
-                      ? _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-primary btn-lg",
-                            on: {
-                              click: function($event) {
-                                return _vm.sendAdviser()
-                              }
+                        ])
+                      }),
+                      0
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _vm.user.schedule_request !== null &&
+                  (_vm.user.registration_status === null ||
+                    _vm.user.registration_status === "rejected")
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary btn-lg",
+                          on: {
+                            click: function($event) {
+                              return _vm.sendAdviser()
                             }
-                          },
-                          [_vm._v("Send to Adviser")]
-                        )
-                      : _vm._e()
-                  ])
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "Send to Adviser\n                            "
+                          )
+                        ]
+                      )
+                    : _vm._e()
                 ])
               ])
             ])
@@ -66881,7 +67050,9 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Time")]),
         _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Days")])
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Days")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Register")])
       ])
     ])
   }
@@ -68534,13 +68705,13 @@ var render = function() {
               ])
             : _vm._e(),
           _vm._v(" "),
-          _vm.user.role == "student"
+          _vm.user.role == "student" || _vm.user.role == "instructor"
             ? _c("router-link", { attrs: { tag: "li", to: "/calendar" } }, [
                 _c("a", [
                   _c("i", { staticClass: "material-icons-outlined" }, [
                     _vm._v("event")
                   ]),
-                  _vm._v("Calendar")
+                  _vm._v("My Calendar")
                 ])
               ])
             : _vm._e()
@@ -70188,7 +70359,7 @@ var render = function() {
             })
           ]),
           _vm._v(" "),
-          _c("table", { staticClass: "table" }, [
+          _c("table", { staticClass: "table table-responsive" }, [
             _vm._m(3),
             _vm._v(" "),
             _c(

@@ -168,7 +168,7 @@
                     <div class="col-md-6 p-0 my-4">
                         <input v-model="search" class="form-control" type="text" placeholder="Search user">
                     </div>
-                    <table class="table">
+                    <table class="table table-responsive">
                         <thead>
                         <tr>
                             <th scope="col">Full Name</th>

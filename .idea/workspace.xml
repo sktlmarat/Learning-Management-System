@@ -44,6 +44,7 @@
       <list>
         <option value="package.json" />
         <option value="Vue Single File Component" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -295,7 +296,9 @@
       <workItem from="1618130172430" duration="4458000" />
       <workItem from="1618300741996" duration="555000" />
       <workItem from="1618398518798" duration="1951000" />
-      <workItem from="1618405590200" duration="350000" />
+      <workItem from="1618405590200" duration="1154000" />
+      <workItem from="1618409310905" duration="123000" />
+      <workItem from="1618422660221" duration="3101000" />
     </task>
     <servers />
   </component>

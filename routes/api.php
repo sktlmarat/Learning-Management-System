@@ -180,6 +180,10 @@ Route::post('/delete-course', function (Request $request) {
     $course->delete();
 });
 
+Route::post('/drop-course', function (Request $request) {
+    User::find($request->uid)->courses()->detach($request->cid);
+});
+
 Route::post('/edit-user', function (Request $request) {
     $user = User::find($request->user_id);
     $user->name = $request->name;

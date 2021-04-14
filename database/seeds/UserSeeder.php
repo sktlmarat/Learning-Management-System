@@ -77,22 +77,19 @@ class UserSeeder extends Seeder
            'title' =>  'Programming Languages',
             'abbreviation' => 'CSCI 245',
             'department_id' => 1,
-            'capacity' => 60
         ]);
 
 
         $nargiz->courses()->create([
             'title' =>  'Microecon',
             'abbreviation' => 'ECON 101',
-            'department_id' => 2,
-            'capacity' => 30
+            'department_id' => 2
         ]);
 
         $marat->courses()->create([
             'title' =>  'Computer Systems',
             'abbreviation' => 'CSCI 202',
-            'department_id' => 1,
-            'capacity' => 15
+            'department_id' => 1
         ]);
 
 //        $econ = \App\Course::find(2);

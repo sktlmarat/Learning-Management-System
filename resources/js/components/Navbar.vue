@@ -31,8 +31,8 @@
                         </li>
                     </ul>
                 </li>
-                <router-link v-if="user.role == 'student'" tag="li" to="/calendar">
-                    <a><i class="material-icons-outlined">event</i>Calendar</a>
+                <router-link v-if="user.role == 'student' || user.role == 'instructor'" tag="li" to="/calendar">
+                    <a><i class="material-icons-outlined">event</i>My Calendar</a>
                 </router-link>
             </ul>
         </div>

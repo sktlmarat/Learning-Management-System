@@ -25,7 +25,7 @@
 - Divide students by the year of study
 
 ##Todo Features
-- Calendar for instructor
-- Drop course
+- Fix ui on requests
+- Fix time overlap
 
 

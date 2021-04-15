@@ -37,7 +37,6 @@
                                         <th scope="col">Course Title</th>
                                         <th scope="col">Abbreviation</th>
                                         <th scope="col">Department</th>
-                                        <th scope="col">Capacity</th>
                                         <th scope="col">Date</th>
                                         <th scope="col">Time</th>
                                         <th scope="col">Days</th>
@@ -49,7 +48,6 @@
                                         <th scope="row">{{ course.title }}</th>
                                         <td>{{ course.abbreviation }}</td>
                                         <td>{{ course.department.name }}</td>
-                                        <td>{{ course.capacity }}</td>
                                         <td>{{ course.date }}</td>
                                         <td>{{ course.time }}</td>
                                         <td>{{ course.day }}</td>
@@ -89,6 +87,7 @@ export default {
             courses: null,
             errors: null,
             search: '',
+            user_courses: ''
         }
     },
     components: {},
@@ -98,6 +97,12 @@ export default {
                 this.courses = response.data;
             }).catch(e => {
             this.errors.push(e);
+        });
+        axios.get('/api/user-course/' + this.user.id)
+        .then(response => {
+            this.user_courses = response.data;
+        }).catch(e => {
+            this.errors.push(e)
         });
         if (this.user.year_of_study) {
             axios.get('/api/registration/' + this.user.year_of_study)
@@ -161,7 +166,7 @@ export default {
             let overlapTime = false;
             let overlapDate = false;
             let overlapDay = false;
-            this.courses.forEach(function (item) {
+            this.user_courses.forEach(function (item) {
                 if (item.id === course.id || item.time == null) return;
                 //check time overlap below
                 let time = item.time.toString().split('-');
@@ -169,10 +174,10 @@ export default {
                     start: time[0],
                     end: time[1]
                 }
-                if (lineA.start >= lineB.start && lineA.start <= lineB.end ||
-                    lineA.end >= lineB.start && lineA.end <= lineB.end ||
-                    lineB.start >= lineA.start && lineB.start <= lineA.end ||
-                    lineB.end >= lineA.start && lineB.end <= lineA.end)
+                if (lineA.start > lineB.start && lineA.start < lineB.end ||
+                    lineA.end > lineB.start && lineA.end < lineB.end ||
+                    lineB.start > lineA.start && lineB.start < lineA.end ||
+                    lineB.end > lineA.start && lineB.end < lineA.end)
                     overlapTime = true;
                 //check date overlap below
                 let dateA = item.date.toString().split(' to ');
@@ -186,7 +191,6 @@ export default {
                 //check day overlap below
                 let daysB = item.day.toString().split(',');
                 overlapDay = daysA.some(r => daysB.indexOf(r) >= 0);
-
             });
             return (overlapTime && overlapDate && overlapDay);
         }

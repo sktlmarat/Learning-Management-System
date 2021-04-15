@@ -24,8 +24,5 @@
 - Course Addition with a session and Instructor
 - Divide students by the year of study
 
-##Todo Features
-- Fix ui on requests
-- Fix time overlap
 
 

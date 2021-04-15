@@ -38,14 +38,27 @@ Route::get('/course/block/{id}', function ($id) {
 });
 
 Route::get('/all-courses', function () {
-    $courses = Course::with(['department','session'])->orderBy('title')->get();
-    $courses->map(function ($course){
-        if(isset($course->session[0]))
+    $courses = Course::with(['department', 'session'])->orderBy('title')->get();
+    $courses->map(function ($course) {
+        if (isset($course->session[0]))
             $course->time = Carbon::parse($course->session[0]->date)->format('H:i')
-                .'-'.Carbon::parse($course->session[0]->date)->addMinutes($course->session[0]->duration)->format('H:i');
-            $course->date = Carbon::parse($course->session[0]->date)->format('Y-m-d')
-                .' to '.Carbon::parse($course->session[0]->end_date)->format('Y-m-d');
-            $course->day = $course->session[0]->session_days;
+                . '-' . Carbon::parse($course->session[0]->date)->addMinutes($course->session[0]->duration)->format('H:i');
+        $course->date = Carbon::parse($course->session[0]->date)->format('Y-m-d')
+            . ' to ' . Carbon::parse($course->session[0]->end_date)->format('Y-m-d');
+        $course->day = $course->session[0]->session_days;
+    });
+    return $courses;
+});
+
+Route::get('/user-course/{uid}', function ($uid) {
+    $courses = User::find($uid)->courses->fresh(['department', 'session']);
+    $courses->map(function ($course) {
+        if (isset($course->session[0]))
+            $course->time = Carbon::parse($course->session[0]->date)->format('H:i')
+                . '-' . Carbon::parse($course->session[0]->date)->addMinutes($course->session[0]->duration)->format('H:i');
+        $course->date = Carbon::parse($course->session[0]->date)->format('Y-m-d')
+            . ' to ' . Carbon::parse($course->session[0]->end_date)->format('Y-m-d');
+        $course->day = $course->session[0]->session_days;
     });
     return $courses;
 });
@@ -217,7 +230,7 @@ Route::post('/add-assignment', function (Request $request) {
 
 Route::post('/add-material', function (Request $request) {
     $material = new Material();
-    if($request->type == 'file') {
+    if ($request->type == 'file') {
         $file = $request->file('file');
         $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
         $file->storePubliclyAs('public', $fileName);
@@ -227,7 +240,7 @@ Route::post('/add-material', function (Request $request) {
         $material->type = 'file';
         $material->save();
     }
-    if($request->type == 'link') {
+    if ($request->type == 'link') {
         $material->title = $request->title;
         $material->link = $request->link;
         $material->block_id = $request->block_id;
@@ -320,19 +333,19 @@ Route::get('get-grade/{user_id}', function ($user_id) {
 });
 
 
-Route::resource('session',SessionController::class);
+Route::resource('session', SessionController::class);
 //Route::resource('course',CourseController::class);
-Route::get('course/{course}/session','CourseController@getSessions');
-Route::get('session/{session}/classes','CourseController@getSessionAttendance');
-Route::get('course/{course}/students','CourseController@getStudents');
-Route::post('course/instructor','CourseController@addInstructorToStudents');
+Route::get('course/{course}/session', 'CourseController@getSessions');
+Route::get('session/{session}/classes', 'CourseController@getSessionAttendance');
+Route::get('course/{course}/students', 'CourseController@getStudents');
+Route::post('course/instructor', 'CourseController@addInstructorToStudents');
 
-Route::resource('attendance',AttendanceController::class);
-Route:: post('/update/attendance','AttendanceController@customUpdate');
+Route::resource('attendance', AttendanceController::class);
+Route:: post('/update/attendance', 'AttendanceController@customUpdate');
 
-Route::get('calendar/{student}','CalendarController@getSchedule');
-Route::get('instructors',function(){
-    return User::where('role','instructor')->get();
+Route::get('calendar/{student}', 'CalendarController@getSchedule');
+Route::get('instructors', function () {
+    return User::where('role', 'instructor')->get();
 });
 
 Route::post('/change-registration-status', function (Request $request) {
@@ -342,6 +355,6 @@ Route::post('/change-registration-status', function (Request $request) {
     return \App\Registration::find($request->id);
 });
 
-Route::get('/registration/{year}',function($year){
-    return \App\Registration::where('year',$year)->get();
+Route::get('/registration/{year}', function ($year) {
+    return \App\Registration::where('year', $year)->get();
 });

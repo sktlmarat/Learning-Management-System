@@ -20800,8 +20800,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
   data: function data() {
@@ -20809,7 +20807,8 @@ __webpack_require__.r(__webpack_exports__);
       registration: '',
       courses: null,
       errors: null,
-      search: ''
+      search: '',
+      user_courses: ''
     };
   },
   components: {},
@@ -20818,6 +20817,11 @@ __webpack_require__.r(__webpack_exports__);
 
     axios.get('/api/all-courses').then(function (response) {
       _this.courses = response.data;
+    })["catch"](function (e) {
+      _this.errors.push(e);
+    });
+    axios.get('/api/user-course/' + this.user.id).then(function (response) {
+      _this.user_courses = response.data;
     })["catch"](function (e) {
       _this.errors.push(e);
     });
@@ -20890,7 +20894,7 @@ __webpack_require__.r(__webpack_exports__);
       var overlapTime = false;
       var overlapDate = false;
       var overlapDay = false;
-      this.courses.forEach(function (item) {
+      this.user_courses.forEach(function (item) {
         if (item.id === course.id || item.time == null) return; //check time overlap below
 
         var time = item.time.toString().split('-');
@@ -20898,7 +20902,7 @@ __webpack_require__.r(__webpack_exports__);
           start: time[0],
           end: time[1]
         };
-        if (lineA.start >= lineB.start && lineA.start <= lineB.end || lineA.end >= lineB.start && lineA.end <= lineB.end || lineB.start >= lineA.start && lineB.start <= lineA.end || lineB.end >= lineA.start && lineB.end <= lineA.end) overlapTime = true; //check date overlap below
+        if (lineA.start > lineB.start && lineA.start < lineB.end || lineA.end > lineB.start && lineA.end < lineB.end || lineB.start > lineA.start && lineB.start < lineA.end || lineB.end > lineA.start && lineB.end < lineA.end) overlapTime = true; //check date overlap below
 
         var dateA = item.date.toString().split(' to ');
         var a_start = dateA[0];
@@ -66943,8 +66947,6 @@ var render = function() {
                           _vm._v(" "),
                           _c("td", [_vm._v(_vm._s(course.department.name))]),
                           _vm._v(" "),
-                          _c("td", [_vm._v(_vm._s(course.capacity))]),
-                          _vm._v(" "),
                           _c("td", [_vm._v(_vm._s(course.date))]),
                           _vm._v(" "),
                           _c("td", [_vm._v(_vm._s(course.time))]),
@@ -67043,8 +67045,6 @@ var staticRenderFns = [
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Abbreviation")]),
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Department")]),
-        _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Capacity")]),
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Date")]),
         _vm._v(" "),

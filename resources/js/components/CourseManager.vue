@@ -164,7 +164,7 @@
                                 <div class="modal-body">
                                     <div class="form-row">
                                         <div class="form-group col-12">
-                                            <label>Capacity</label>
+                                            <label>Choose instructor</label>
                                             <select v-model="add_instructor.user_id" class="form-control">
                                                 <option v-for="instructor in instructors" :value="instructor.id">{{ instructor.name }}</option>
                                             </select>

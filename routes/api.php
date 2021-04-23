@@ -135,6 +135,7 @@ Route::post('/add-user', function (Request $request) {
     $user->password = bcrypt($request->password);
     $user->year_of_study = $request->year_of_study;
     $user->department_id = $request->department;
+    $user->adviser_id = $request->adviser;
     $user->save();
     $data = [
         'name' => $request->first_name . ' ' . $request->last_name,

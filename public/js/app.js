@@ -22456,11 +22456,20 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
   data: function data() {
     return {
       users: null,
+      instructors: [],
       registrations: null,
       errors: [],
       search: '',
@@ -22472,7 +22481,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         role: '',
         email: '@nu.edu.kz',
         avatar: '',
-        year_of_study: ''
+        year_of_study: '',
+        adviser: ''
       },
       edit_user: {
         id: '',
@@ -22510,6 +22520,17 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         _this.registrations = response.data;
       })["catch"](function (e) {
         _this.errors.push(e);
+      });
+      axios.get('/api/instructors').then(function (response) {
+        _this.instructors = response.data;
+      })["catch"](function (e) {
+        _this.errors.push(e);
+
+        _this.$toast.open({
+          message: 'Error occurred during instructor fetch',
+          type: 'error',
+          position: 'top-right'
+        });
       });
     },
     add_user: function add_user() {
@@ -66468,7 +66489,7 @@ var render = function() {
                     _c("div", { staticClass: "modal-body" }, [
                       _c("div", { staticClass: "form-row" }, [
                         _c("div", { staticClass: "form-group col-12" }, [
-                          _c("label", [_vm._v("Capacity")]),
+                          _c("label", [_vm._v("Choose instructor")]),
                           _vm._v(" "),
                           _c(
                             "select",
@@ -69958,6 +69979,59 @@ var render = function() {
                               _vm._v(" "),
                               _c("option", [_vm._v("admin")])
                             ]
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group col-12" }, [
+                          _c("label", [_vm._v("Choose instructor")]),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.new_user.adviser,
+                                  expression: "new_user.adviser"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    _vm.new_user,
+                                    "adviser",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            _vm._l(_vm.instructors, function(instructor) {
+                              return _c(
+                                "option",
+                                { domProps: { value: instructor.id } },
+                                [
+                                  _vm._v(
+                                    "\n                                                " +
+                                      _vm._s(instructor.name) +
+                                      "\n                                            "
+                                  )
+                                ]
+                              )
+                            }),
+                            0
                           )
                         ]),
                         _vm._v(" "),

@@ -74,6 +74,14 @@
                                             </select>
                                         </div>
                                         <div class="form-group col-12">
+                                            <label>Choose instructor</label>
+                                            <select v-model="new_user.adviser" class="form-control">
+                                                <option v-for="instructor in instructors" :value="instructor.id">
+                                                    {{ instructor.name }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-12">
                                             <label>Select Image</label>
                                             <input ref="avatar" type="file" class="form-control" @change="handleAvatar">
                                         </div>
@@ -207,6 +215,7 @@ export default {
     data() {
         return {
             users: null,
+            instructors: [],
             registrations: null,
             errors: [],
             search: '',
@@ -218,7 +227,8 @@ export default {
                 role: '',
                 email: '@nu.edu.kz',
                 avatar: '',
-                year_of_study: ''
+                year_of_study: '',
+                adviser: '',
             },
             edit_user: {
                 id: '',
@@ -257,6 +267,17 @@ export default {
                     this.registrations = response.data;
                 }).catch(e => {
                 this.errors.push(e)
+            });
+            axios.get('/api/instructors')
+                .then(response => {
+                    this.instructors = response.data;
+                }).catch(e => {
+                this.errors.push(e);
+                this.$toast.open({
+                    message: 'Error occurred during instructor fetch',
+                    type: 'error',
+                    position: 'top-right'
+                });
             });
         },
         add_user() {
